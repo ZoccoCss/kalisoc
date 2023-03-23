@@ -28,6 +28,9 @@ Consists of 2 files.
   Please note that this repository is still work in progress. At this point, the VPC has been created succesfully. In regards to the VMs, the KaliPurple and the KaliHeliotrope are created but haven't been totally configured yet. A Guacamole Bastion has also been created but not yet configured. 
   
   
+  There are no Kali Purple images in AWS at this moment, so will use the image available and install the required packages. 
+  
+  
   Reference:  https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
   
 Desired final SOC Configuration:
