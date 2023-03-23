@@ -1,0 +1,287 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ExportVPCStackName:
+    Description: Name of the Stack that Created the Kali Purple VPC
+    Type: String
+        
+  SSMRoleName:
+    Description: Name of the IAM Role for SSM Management of the EC2 Instance
+    Type: String   
+    Default: PenTestLab-SSMAccess
+        
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.        
+    
+  SSMRoleNameGuacamole:
+    Description: Name of the IAM Role for SSM Management of the EC2 Instance
+    Type: String   
+    Default: PenTestLab-SSMAccess
+        
+  InstanceTypeGuacamole:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.       
+    
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
+  AmazonImageID:
+    Description: The ID of the Amazon machine image (AMI) - Default is Guacamole
+    Type: String
+    Default: ami-000db6736082f3ee9
+    
+  AmazonImageIDGuacamole:
+    Description: The ID of the Amazon machine image (AMI) - Bastion - Default is Guacamole
+    Type: String
+    Default: ami-0d15b4289190035e4   
+    
+Resources:
+  NATGatewayEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: VPC
+      Tags:
+        - Key: Name
+          Value: NatEIP
+
+  NatGateway:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt NATGatewayEIP.AllocationId
+      SubnetId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+      Tags:
+        - Key: Name
+          Value: NAT Gateway Public Subnet
+
+  PrivateRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Private Route Table 
+      VpcId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-VPC
+
+  PrivateRoute:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+      RouteTableId: !Ref PrivateRouteTable
+
+  PrivateRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PrivateSubnet
+        
+        
+  CompromizedRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      SubnetId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-CompromizedSubnet
+        
+        
+  KaliPurple:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref SSMRoleName
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PrivateSubnet  
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageID 
+      Tags:
+        - Key: Name
+          Value: EC2 | Kali-Purple
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash 
+            apt update -y
+            apt install -y apache2
+            echo "Healthy" > /var/www/html/index.html
+            systemctl start apache2  
+            apt install xrdp
+            systemctl enable xrdp --now
+            sed -i 's/#PasswordAuthentication no/PasswordAuthentication yes/' sshd_configTest
+            
+            
+        
+  KaliHeliotrope:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref SSMRoleName
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageID 
+      Tags:
+        - Key: Name
+          Value: EC2 | Kali-Heliotrope
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            apt update -y
+            apt install -y apache2
+            echo "Healthy" > /var/www/html/index.html
+            systemctl start apache2  
+            apt install xrdp
+            systemctl enable xrdp --now
+            wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+            apt install kali-autopilot
+            apt install -y rsyslog
+            mkdir /tmp/ssm
+            cd /tmp/ssm
+            wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+            dpkg -i amazon-ssm-agent.deb
+            systemctl enable amazon-ssm-agent
+            systemctl start amazon-ssm-agent
+            
+            
+  GuacamoleBastion:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceTypeGuacamole
+      IamInstanceProfile: !Ref SSMRoleNameGuacamole
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDGuacamole 
+      Tags:
+        - Key: Name
+          Value: EC2 | Guacamole Bastion
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            apt update -y
