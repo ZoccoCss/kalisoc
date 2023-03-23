@@ -12,6 +12,19 @@ Consists of 2 files.
   
   2 - Launch KaliPurple-NAT-EC2 - This will configure the instances acording to the requirements in https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
   
+  This is the diagram of the VPC
+  
+  
+  
+  
+  ![new-designer](https://user-images.githubusercontent.com/47893772/227371698-4484616c-314f-46de-bb46-8b76dc111772.png)
+
+  
+  
+  
+  
+  
+  
   Please note that this repository is still work in progress. 
   
   
