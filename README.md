@@ -1,7 +1,7 @@
 # KaliPurple-AWS-Cloudformation-SOC-Template
 Cloudformation Template to Launch the SOC from Kali Purple
 
-Launching the SOC in AWS could be an cost effective option for people that do not have access to a Proxmox server. The main advantage is that it would be easy to launch, easy and cost efective to use and finally, easy to delete. 
+Launching the SOC in AWS could be an cost effective option for people that do not have access to a Proxmox server. The main advantages are that it would be easy to launch, use and delete. 
 
 ![Screenshot_20230323_173403](https://user-images.githubusercontent.com/47893772/227368991-d61666b2-c12d-4051-91ce-629e8815347d.png)
 
