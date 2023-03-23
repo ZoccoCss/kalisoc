@@ -198,7 +198,7 @@ Resources:
   CompromizedRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      RouteTableId: !Ref PrivateRouteTable1
+      RouteTableId: !Ref PrivateRouteTable
       SubnetId: 
         Fn::ImportValue: !Sub ${ExportVPCStackName}-CompromizedSubnet
         
