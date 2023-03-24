@@ -143,7 +143,7 @@ Parameters:
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
 
   AmazonImageID:
-    Description: The ID of the Amazon machine image (AMI) - Default is Guacamole
+    Description: The ID of the Amazon machine image (AMI) - Default is Kali
     Type: String
     Default: ami-000db6736082f3ee9
     
@@ -221,14 +221,16 @@ Resources:
         Fn::Base64:
           !Sub |
             #!/bin/bash 
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+            service sshd restart
+            echo KaliSOC$2023 | passwd kali #Change Password Later
             apt-get update -y
             apt-get install -y apache2
             echo "Healthy" > /var/www/html/index.html
             systemctl start apache2  
             apt-get install xrdp
             systemctl enable xrdp --now
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-            
+                       
             
         
   KaliHeliotrope:
@@ -253,7 +255,7 @@ Resources:
             apt-get install -y apache2
             echo "Healthy" > /var/www/html/index.html
             systemctl start apache2  
-            apt install xrdp
+            apt-get install xrdp
             systemctl enable xrdp --now
             wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
             apt-get install kali-autopilot
