@@ -221,13 +221,13 @@ Resources:
         Fn::Base64:
           !Sub |
             #!/bin/bash 
-            apt update -y
-            apt install -y apache2
+            apt-get update -y
+            apt-get install -y apache2
             echo "Healthy" > /var/www/html/index.html
             systemctl start apache2  
-            apt install xrdp
+            apt-get install xrdp
             systemctl enable xrdp --now
-            sed -i 's/#PasswordAuthentication no/PasswordAuthentication yes/' sshd_configTest
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
             
             
         
@@ -249,15 +249,15 @@ Resources:
         Fn::Base64:
           !Sub |
             #!/bin/bash
-            apt update -y
-            apt install -y apache2
+            apt-get update -y
+            apt-get install -y apache2
             echo "Healthy" > /var/www/html/index.html
             systemctl start apache2  
             apt install xrdp
             systemctl enable xrdp --now
             wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
-            apt install kali-autopilot
-            apt install -y rsyslog
+            apt-get install kali-autopilot
+            apt-get install -y rsyslog
             mkdir /tmp/ssm
             cd /tmp/ssm
             wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
@@ -284,4 +284,4 @@ Resources:
         Fn::Base64:
           !Sub |
             #!/bin/bash
-            apt update -y
+            apt-get update -y
