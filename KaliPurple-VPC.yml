@@ -179,11 +179,15 @@ Resources:
         - IpProtocol: tcp
           FromPort: 443
           ToPort: 443
-          CidrIp:     !Ref SSHLocation
+          CidrIp: !Ref SSHLocation
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: !Ref SSHLocation  
       Tags:
         - Key: Name
           Value: SSH Security Group
