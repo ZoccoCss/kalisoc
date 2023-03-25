@@ -192,6 +192,43 @@ Resources:
         - Key: Name
           Value: SSH Security Group
       VpcId: !Ref PurpleVPC
+    
+  WANNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Network Interface for WAN
+      SubnetId: !Ref PublicSubnet
+      Tags: 
+        - Key: Name
+          Value: Byzantium | WAN | Public Subnet
+          
+  ClusterNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Network Interface for Cluster
+      SubnetId: !Ref PrivateSubnet
+      Tags: 
+        - Key: Name
+          Value: Byzantium | Cluster | Private Subnet         
+          
+  LANNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Network Interface for LAN
+      SubnetId: !Ref CompromizedSubnet
+      Tags: 
+        - Key: Name
+          Value: Byzantium | LAN | Compromized Subnet  
+          
+  MGMTNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Network Interface for Management
+      SubnetId: !Ref DMZSubnet
+      Tags: 
+        - Key: Name
+          Value: Byzantium | Management | Demilitarized Subnet     
+          
 
 Outputs:
   PurpleVPC:
@@ -224,8 +261,25 @@ Outputs:
     Export:
       Name: !Sub '${AWS::StackName}-SSHSecurityGroup'
     Value: !Ref SSHSecurityGroup    
-#  PrivateRouteTable:
-#    Description: PrivateRouteTable ID
-#    Export:
-#      Name: !Sub '${AWS::StackName}-PrivateRouteTable'
-#    Value: !Ref PrivateRouteTable    
+  WANNI:
+    Description: Network Interface for WAN
+    Export:
+      Name: !Sub '${AWS::StackName}-WANNI'
+    Value: !Ref WANNI       
+  ClusterNI:
+    Description: Network Interface for Cluster
+    Export:
+      Name: !Sub '${AWS::StackName}-ClusterNI'
+    Value: !Ref ClusterNI        
+  LANNI:
+    Description: Network Interface for LAN
+    Export:
+      Name: !Sub '${AWS::StackName}-LANNI'
+    Value: !Ref LANNI      
+  MGMTNI:
+    Description: Network Interface for Management
+    Export:
+      Name: !Sub '${AWS::StackName}-MGMTNI'
+    Value: !Ref MGMTNI      
+    
+    

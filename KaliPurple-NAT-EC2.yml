@@ -140,7 +140,7 @@ Parameters:
   InstanceTypeByzantium:
     Description: WebServer EC2 instance type
     Type: String
-    Default: m4.large
+    Default: m4.xlarge
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -364,6 +364,9 @@ Resources:
         - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
       KeyName: !Ref KeyName
       ImageId: !Ref AmazonImageIDByzantium 
+#      NetworkInterfaces:
+#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-WANNI
+#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI        
       Tags:
         - Key: Name
           Value: EC2 | Byzantium
@@ -371,3 +374,27 @@ Resources:
         Fn::Base64:
           !Sub |
             #!/bin/bash
+
+  BysLANAttachmnet:            
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Properties: 
+      InstanceId: !Ref Byzantium
+      DeviceIndex: 1
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
+        
+  BysClusterttachmnet:            
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Properties: 
+      InstanceId: !Ref Byzantium
+      DeviceIndex: 2
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-ClusterNI  
+        
+  BysMGMAttachmnet:            
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Properties: 
+      InstanceId: !Ref Byzantium
+      DeviceIndex: 3
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-MGM   
