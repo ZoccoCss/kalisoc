@@ -397,4 +397,4 @@ Resources:
       InstanceId: !Ref Byzantium
       DeviceIndex: 3
       NetworkInterfaceId: 
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-MGM   
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-MGMTNI   
