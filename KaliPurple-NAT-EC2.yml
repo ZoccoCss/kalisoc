@@ -140,7 +140,7 @@ Parameters:
   InstanceTypeByzantium:
     Description: WebServer EC2 instance type
     Type: String
-    Default: m4.xlarge
+    Default: m4.large
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -356,6 +356,11 @@ Resources:
   Byzantium:
     Type: AWS::EC2::Instance
     Properties:
+      BlockDeviceMappings: 
+       - 
+         DeviceName: /dev/sda1
+         Ebs:
+           VolumeSize: 128  
       InstanceType: !Ref InstanceTypeByzantium
       IamInstanceProfile: !Ref SSMRoleName
       SubnetId:  
@@ -383,18 +388,21 @@ Resources:
       NetworkInterfaceId: 
         Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
         
-  BysClusterttachmnet:            
-    Type: AWS::EC2::NetworkInterfaceAttachment
-    Properties: 
-      InstanceId: !Ref Byzantium
-      DeviceIndex: 2
-      NetworkInterfaceId: 
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-ClusterNI  
+#  BysClusterttachmnet:            
+#    Type: AWS::EC2::NetworkInterfaceAttachment
+#    Properties: 
+#      InstanceId: !Ref Byzantium
+#      DeviceIndex: 2
+#      NetworkInterfaceId: 
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-ClusterNI  
         
-  BysMGMAttachmnet:            
-    Type: AWS::EC2::NetworkInterfaceAttachment
-    Properties: 
-      InstanceId: !Ref Byzantium
-      DeviceIndex: 3
-      NetworkInterfaceId: 
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-MGMTNI   
+#  BysMGMAttachmnet:            
+#    Type: AWS::EC2::NetworkInterfaceAttachment
+#    Properties: 
+#      InstanceId: !Ref Byzantium
+#      DeviceIndex: 3
+#      NetworkInterfaceId: 
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-MGMTNI   
+        
+
+         

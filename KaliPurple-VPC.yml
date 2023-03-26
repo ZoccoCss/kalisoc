@@ -261,25 +261,25 @@ Outputs:
     Export:
       Name: !Sub '${AWS::StackName}-SSHSecurityGroup'
     Value: !Ref SSHSecurityGroup    
-  WANNI:
-    Description: Network Interface for WAN
-    Export:
-      Name: !Sub '${AWS::StackName}-WANNI'
-    Value: !Ref WANNI       
-  ClusterNI:
-    Description: Network Interface for Cluster
-    Export:
-      Name: !Sub '${AWS::StackName}-ClusterNI'
-    Value: !Ref ClusterNI        
+#  WANNI:
+#    Description: Network Interface for WAN
+#    Export:
+#      Name: !Sub '${AWS::StackName}-WANNI'
+#    Value: !Ref WANNI       
+#  ClusterNI:
+#    Description: Network Interface for Cluster
+#    Export:
+#      Name: !Sub '${AWS::StackName}-ClusterNI'
+#    Value: !Ref ClusterNI        
   LANNI:
     Description: Network Interface for LAN
     Export:
       Name: !Sub '${AWS::StackName}-LANNI'
     Value: !Ref LANNI      
-  MGMTNI:
-    Description: Network Interface for Management
-    Export:
-      Name: !Sub '${AWS::StackName}-MGMTNI'
-    Value: !Ref MGMTNI      
+#  MGMTNI:
+#    Description: Network Interface for Management
+#    Export:
+#      Name: !Sub '${AWS::StackName}-MGMTNI'
+#    Value: !Ref MGMTNI      
     
     
