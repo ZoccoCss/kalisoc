@@ -6,14 +6,15 @@ Metadata:
       - Label:
           default: VPC CIDR
         Parameters:
-          - PurpleVPCNetCIDR
+          - KaliVPCNetCIDR
       - Label:
-          default: Subnet CIDR
+          default: Kali Subnet CIDR
         Parameters:
           - PublicSubnetCIDR
-          - PrivateSubnetCIDR
-          - DMZSubnetCIDR
-          - CompromizedSubnetCIDR
+          - LANSubnetCIDR
+          - VioletSubnetCIDR
+          - PurpleSubnetCIDR
+          - EminenceSubnetCIDR
       - Label:
           default: SSH CIDR
         Parameters:
@@ -21,7 +22,6 @@ Metadata:
           
           
 Parameters:
-
   SSHLocation:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
@@ -30,65 +30,44 @@ Parameters:
     MaxLength: '18'
     MinLength: '9'
     Type: String
-  PurpleVPCNetCIDR:
+  KaliVPCNetCIDR:
     Default: 192.168.0.0/16
     Description: Please Enter the IP Range of the VPC
     Type: String
-  PrivateSubnetCIDR:
-    Default: 192.168.253.0/24
+  PublicSubnetCIDR:
+    Default: 192.168.0.0/24
     Description: Please Enter the IP Range of the Private Subnet
     Type: String
-  PublicSubnetCIDR:
-    Default: 192.168.252.0/24
+  LANSubnetCIDR:
+    Default: 192.168.1.0/24
     Description: Please Enter the IP Range of the Public Subnet
     Type: String
-  DMZSubnetCIDR:
-    Default: 192.168.251.0/24
+  VioletSubnetCIDR:
+    Default: 192.168.2.0/24
     Description: Please Enter the IP Range of the DMZ Subnet
     Type: String
-  CompromizedSubnetCIDR:
-    Default: 192.168.250.0/24
+  PurpleSubnetCIDR:
+    Default: 192.168.3.0/24
     Description: Please Enter the IP Range of the Public Subnet
     Type: String
+  EminenceSubnetCIDR:
+    Default: 192.168.4.0/24
+    Description: Please Enter the IP Range of the Public Subnet
+    Type: String    
+    
     
     
 Resources:
-  PurpleVPC:
+  KaliVPC:
     Type: 'AWS::EC2::VPC'
     Properties:
-      CidrBlock: !Ref PurpleVPCNetCIDR
+      CidrBlock: !Ref KaliVPCNetCIDR
       EnableDnsHostnames: true
       EnableDnsSupport: true
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: PurpleVPC
-
-  PrivateSubnet:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Select 
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Ref PrivateSubnetCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: PrivateSubnet
-      VpcId: !Ref PurpleVPC
-
-  DMZSubnet:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Select 
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Ref DMZSubnetCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: DMZ
-      VpcId: !Ref PurpleVPC
+          Value: KaliVPC
 
   PublicSubnet:
     Type: 'AWS::EC2::Subnet'
@@ -101,20 +80,59 @@ Resources:
       Tags:
         - Key: Name
           Value: Public
-      VpcId: !Ref PurpleVPC
-
-  CompromizedSubnet:
+      VpcId: !Ref KaliVPC
+          
+  LANSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       AvailabilityZone: !Select 
         - 0
         - !GetAZs ''
-      CidrBlock: !Ref CompromizedSubnetCIDR
+      CidrBlock: !Ref LANSubnetCIDR
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: Compromized
-      VpcId: !Ref PurpleVPC
+          Value: LAN Subnet
+      VpcId: !Ref KaliVPC
+
+  VioletSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Ref VioletSubnetCIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Violet Subnet
+      VpcId: !Ref KaliVPC
+
+  PurpleSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Ref PurpleSubnetCIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Purple Subnet
+      VpcId: !Ref KaliVPC
+      
+  EminenceSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Ref EminenceSubnetCIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Eminence Subnet
+      VpcId: !Ref KaliVPC      
 
   IGW:
     Type: 'AWS::EC2::InternetGateway'
@@ -126,7 +144,7 @@ Resources:
   IGWAttacment:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
-      VpcId: !Ref PurpleVPC
+      VpcId: !Ref KaliVPC
       InternetGatewayId: !Ref IGW
 
   PublicRouteTable:
@@ -135,7 +153,7 @@ Resources:
       Tags:
         - Key: Name
           Value: PublicRouteTable
-      VpcId: !Ref PurpleVPC
+      VpcId: !Ref KaliVPC
 
   PublicRoute:
     Type: 'AWS::EC2::Route'
@@ -149,23 +167,6 @@ Resources:
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet
-      
-#The Private Route Table needs more routes to be included in the NAT-EC2 file because need the Bastion and the NAT to create      
-
-#  PrivateRouteTable:
-#    Type: 'AWS::EC2::RouteTable'
-#    Properties:
-#      Tags:
-#        - Key: Name
-#          Value: PrivateRouteTable
-#      VpcId: !Ref PurpleVPC
-
-#  PrivateSubnet1RouteTableAssociation:
-#    Type: 'AWS::EC2::SubnetRuteTableAssociation'
-#    Properties:
-#      RouteTableId: !Ref PrivateRouteTable
-#      SubnetId: !Ref PrivateSubnet
-
       
   SSHSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -191,95 +192,68 @@ Resources:
       Tags:
         - Key: Name
           Value: SSH Security Group
-      VpcId: !Ref PurpleVPC
-    
-  WANNI:  
-    Type: 'AWS::EC2::NetworkInterface'
-    Properties: 
-      Description: Network Interface for WAN
-      SubnetId: !Ref PublicSubnet
-      Tags: 
-        - Key: Name
-          Value: Byzantium | WAN | Public Subnet
-          
-  ClusterNI:  
-    Type: 'AWS::EC2::NetworkInterface'
-    Properties: 
-      Description: Network Interface for Cluster
-      SubnetId: !Ref PrivateSubnet
-      Tags: 
-        - Key: Name
-          Value: Byzantium | Cluster | Private Subnet         
-          
+      VpcId: !Ref KaliVPC
+
   LANNI:  
     Type: 'AWS::EC2::NetworkInterface'
     Properties: 
       Description: Network Interface for LAN
-      SubnetId: !Ref CompromizedSubnet
+      SourceDestCheck: false
+      SubnetId: !Ref LANSubnet
+      GroupSet:
+        - !Ref SSHSecurityGroup
+      PrivateIpAddress: 192.168.1.10        
       Tags: 
         - Key: Name
-          Value: Byzantium | LAN | Compromized Subnet  
-          
-  MGMTNI:  
+          Value: Byzantium | LAN Subnet          
+  SOCNI:  
     Type: 'AWS::EC2::NetworkInterface'
     Properties: 
-      Description: Network Interface for Management
-      SubnetId: !Ref DMZSubnet
+      Description: Network Interface for SOC
+      SubnetId: !Ref VioletSubnet
       Tags: 
         - Key: Name
-          Value: Byzantium | Management | Demilitarized Subnet     
-          
-
+          Value: Byzantium | SOC Subnet
+   
 Outputs:
-  PurpleVPC:
-    Description: PurpleVPC ID
+  KaliVPC:
+    Description: KaliVPC ID
     Export:
       Name: !Sub '${AWS::StackName}-VPC'
-    Value: !Ref PurpleVPC
+    Value: !Ref KaliVPC
   PublicSubnet:
     Description: Public ID
     Export:
       Name: !Sub '${AWS::StackName}-PublicSubnet'
     Value: !Ref PublicSubnet
-  PrivateSubnet:
-    Description: PrivateSubnet ID
+  LANSubnet:
+    Description: LANSubnet ID
     Export:
-      Name: !Sub '${AWS::StackName}-PrivateSubnet'
-    Value: !Ref PrivateSubnet 
-  DMZSubnet:
-    Description: DMZSubnet ID
+      Name: !Sub '${AWS::StackName}-LANSubnet'
+    Value: !Ref LANSubnet 
+  VioletSubnet:
+    Description: VioletSubnet ID
     Export:
-      Name: !Sub '${AWS::StackName}-DMZSubnet'
-    Value: !Ref DMZSubnet    
-  CompromizedSubnet:
-    Description: CompromizedSubnet ID
+      Name: !Sub '${AWS::StackName}-VioletSubnet'
+    Value: !Ref VioletSubnet    
+  PurpleSubnet:
+    Description: PurpleSubnet ID
     Export:
-      Name: !Sub '${AWS::StackName}-CompromizedSubnet'
-    Value: !Ref CompromizedSubnet
-  SSHSecurityGroup:
-    Description: SSHSecurityGroup ID
-    Export:
-      Name: !Sub '${AWS::StackName}-SSHSecurityGroup'
-    Value: !Ref SSHSecurityGroup    
-#  WANNI:
-#    Description: Network Interface for WAN
-#    Export:
-#      Name: !Sub '${AWS::StackName}-WANNI'
-#    Value: !Ref WANNI       
-#  ClusterNI:
-#    Description: Network Interface for Cluster
-#    Export:
-#      Name: !Sub '${AWS::StackName}-ClusterNI'
-#    Value: !Ref ClusterNI        
+      Name: !Sub '${AWS::StackName}-PurpleSubnet'
+    Value: !Ref PurpleSubnet
   LANNI:
     Description: Network Interface for LAN
     Export:
       Name: !Sub '${AWS::StackName}-LANNI'
-    Value: !Ref LANNI      
-#  MGMTNI:
-#    Description: Network Interface for Management
-#    Export:
-#      Name: !Sub '${AWS::StackName}-MGMTNI'
-#    Value: !Ref MGMTNI      
-    
+    Value: !Ref LANNI  
+  SOCNI:
+    Description: Network Interface for SOC
+    Export:
+      Name: !Sub '${AWS::StackName}-SOCNI'
+    Value: !Ref SOCNI         
+  SSHSecurityGroup:
+    Description: SSHSecurityGroup ID
+    Export:
+      Name: !Sub '${AWS::StackName}-SSHSecurityGroup'
+    Value: !Ref SSHSecurityGroup   
     
