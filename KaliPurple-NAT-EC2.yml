@@ -258,100 +258,100 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateRouteTable
       SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-PrivateSubnet
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PurpleSubnet
           
   CompromizedRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       RouteTableId: !Ref PrivateRouteTable
       SubnetId: 
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-CompromizedSubnet
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet
           
-  KaliPurple:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref InstanceType
-      IamInstanceProfile: !Ref SSMRoleName
-      SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-PrivateSubnet  
-      SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
-      KeyName: !Ref KeyName
-      ImageId: !Ref AmazonImageID 
-      Tags:
-        - Key: Name
-          Value: EC2 | Kali-Purple
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash 
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-            service sshd restart
-            echo 'kali:kali2023' | chpasswd #Change Password Later
-            sleep 15s # Waits 15 seconds.
-            apt-get update -y
-            apt-get install -y apache2
-            echo "Healthy" > /var/www/html/index.html
-            systemctl start apache2  
-            apt-get install xrdp -y
-            systemctl enable xrdp --now
+#  KaliPurple:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      InstanceType: !Ref InstanceType
+#      IamInstanceProfile: !Ref SSMRoleName
+#      SubnetId:  
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-PurpleSubnet  
+#      SecurityGroupIds:
+#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+#      KeyName: !Ref KeyName
+#      ImageId: !Ref AmazonImageID 
+#      Tags:
+#        - Key: Name
+#          Value: EC2 | Kali-Purple
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash 
+#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+#            service sshd restart
+#            echo 'kali:kali2023' | chpasswd #Change Password Later
+#            sleep 15s # Waits 15 seconds.
+#            apt-get update -y
+#            apt-get install -y apache2
+#            echo "Healthy" > /var/www/html/index.html
+#            systemctl start apache2  
+#            apt-get install xrdp -y
+#            systemctl enable xrdp --now
                        
             
         
-  KaliHeliotrope:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref InstanceType
-      IamInstanceProfile: !Ref SSMRoleName
-      SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
-      SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
-      KeyName: !Ref KeyName
-      ImageId: !Ref AmazonImageID 
-      Tags:
-        - Key: Name
-          Value: EC2 | Kali-Heliotrope
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash
-            apt-get update -y
-            apt-get install -y apache2
-            echo "Healthy" > /var/www/html/index.html
-            systemctl start apache2  
-            apt-get install xrdp -y
-            systemctl enable xrdp --now
-            wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
-            apt-get install kali-autopilot -y
-            apt-get install -y rsyslog
-            mkdir /tmp/ssm
-            cd /tmp/ssm
-            wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
-            dpkg -i amazon-ssm-agent.deb
-            systemctl enable amazon-ssm-agent
-            systemctl start amazon-ssm-agent
+#  KaliHeliotrope:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      InstanceType: !Ref InstanceType
+#      IamInstanceProfile: !Ref SSMRoleName
+#      SubnetId:  
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+#      SecurityGroupIds:
+#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+#      KeyName: !Ref KeyName
+#      ImageId: !Ref AmazonImageID 
+#      Tags:
+#        - Key: Name
+#          Value: EC2 | Kali-Heliotrope
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash
+#            apt-get update -y
+#            apt-get install -y apache2
+#            echo "Healthy" > /var/www/html/index.html
+#            systemctl start apache2  
+#            apt-get install xrdp -y
+#            systemctl enable xrdp --now
+#            wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+#            apt-get install kali-autopilot -y
+#            apt-get install -y rsyslog
+#            mkdir /tmp/ssm
+#            cd /tmp/ssm
+#            wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+#            dpkg -i amazon-ssm-agent.deb
+#            systemctl enable amazon-ssm-agent
+#            systemctl start amazon-ssm-agent
             
             
-  GuacamoleBastion:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref InstanceTypeGuacamole
-      IamInstanceProfile: !Ref SSMRoleNameGuacamole
-      SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
-      SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
-      KeyName: !Ref KeyName
-      ImageId: !Ref AmazonImageIDGuacamole 
-      Tags:
-        - Key: Name
-          Value: EC2 | Guacamole Bastion
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash
-            apt-get update -y
+#  GuacamoleBastion:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      InstanceType: !Ref InstanceTypeGuacamole
+#      IamInstanceProfile: !Ref SSMRoleNameGuacamole
+#      SubnetId:  
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+#      SecurityGroupIds:
+#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+#      KeyName: !Ref KeyName
+#      ImageId: !Ref AmazonImageIDGuacamole 
+#      Tags:
+#        - Key: Name
+#          Value: EC2 | Guacamole Bastion
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash
+#            apt-get update -y
             
   Byzantium:
     Type: AWS::EC2::Instance
@@ -369,9 +369,6 @@ Resources:
         - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
       KeyName: !Ref KeyName
       ImageId: !Ref AmazonImageIDByzantium 
-#      NetworkInterfaces:
-#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-WANNI
-#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI        
       Tags:
         - Key: Name
           Value: EC2 | Byzantium
@@ -380,13 +377,37 @@ Resources:
           !Sub |
             #!/bin/bash
 
-  BysLANAttachmnet:            
-    Type: AWS::EC2::NetworkInterfaceAttachment
-    Properties: 
-      InstanceId: !Ref Byzantium
-      DeviceIndex: 1
-      NetworkInterfaceId: 
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
+#  ByzLANAttachmnet:            
+#    Type: AWS::EC2::NetworkInterfaceAttachment
+#    Properties: 
+#      InstanceId: !Ref Byzantium
+#      DeviceIndex: 1
+#      NetworkInterfaceId: 
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
+        
+#  ByzSOCIttachmnet:            
+#    Type: AWS::EC2::NetworkInterfaceAttachment
+#    Properties: 
+#      InstanceId: !Ref Byzantium
+#      DeviceIndex: 2
+#      NetworkInterfaceId: 
+#        Fn::ImportValue: !Sub ${ExportVPCStackName}-SOCNI 
+
+#  ByzGatewayEIP:
+#    Type: 'AWS::EC2::EIP'
+#    Properties:
+#      Domain: VPC
+#      Tags:
+#        - Key: Name
+#          Value: NatEIP   
+#  ByzEIPAssoc:          
+#    Type: AWS::EC2::EIPAssociation
+#    Properties: 
+#      AllocationId: String
+#      EIP: !Ref ByzGatewayEIP
+#      InstanceId: !Ref Byzantium
+#      NetworkInterfaceId: !Ref ByzWANNIttachmnet
+#      PrivateIpAddress: String          
         
 #  BysClusterttachmnet:            
 #    Type: AWS::EC2::NetworkInterfaceAttachment
