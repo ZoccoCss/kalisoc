@@ -12,15 +12,14 @@ Metadata:
         Parameters:
           - PublicSubnetCIDR
           - LANSubnetCIDR
-          - VioletSubnetCIDR
+          - SOCSubnetCIDR
           - PurpleSubnetCIDR
           - EminenceSubnetCIDR
       - Label:
           default: SSH CIDR
         Parameters:
           - SSHLocation
-          
-          
+                    
 Parameters:
   SSHLocation:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
@@ -42,20 +41,11 @@ Parameters:
     Default: 192.168.1.0/24
     Description: Please Enter the IP Range of the Public Subnet
     Type: String
-  VioletSubnetCIDR:
+  SOCSubnetCIDR:
     Default: 192.168.2.0/24
     Description: Please Enter the IP Range of the DMZ Subnet
     Type: String
-  PurpleSubnetCIDR:
-    Default: 192.168.3.0/24
-    Description: Please Enter the IP Range of the Public Subnet
-    Type: String
-  EminenceSubnetCIDR:
-    Default: 192.168.4.0/24
-    Description: Please Enter the IP Range of the Public Subnet
-    Type: String    
-    
-    
+      
     
 Resources:
   KaliVPC:
@@ -95,46 +85,20 @@ Resources:
           Value: LAN Subnet
       VpcId: !Ref KaliVPC
 
-  VioletSubnet:
+  SOCSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       AvailabilityZone: !Select 
         - 0
         - !GetAZs ''
-      CidrBlock: !Ref VioletSubnetCIDR
+      CidrBlock: !Ref SOCSubnetCIDR
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: Violet Subnet
       VpcId: !Ref KaliVPC
 
-  PurpleSubnet:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Select 
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Ref PurpleSubnetCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: Purple Subnet
-      VpcId: !Ref KaliVPC
-      
-  EminenceSubnet:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Select 
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Ref EminenceSubnetCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: Eminence Subnet
-      VpcId: !Ref KaliVPC      
-
-  IGW:
+   IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
@@ -210,7 +174,7 @@ Resources:
     Type: 'AWS::EC2::NetworkInterface'
     Properties: 
       Description: Network Interface for SOC
-      SubnetId: !Ref VioletSubnet
+      SubnetId: !Ref SOCSubnet
       Tags: 
         - Key: Name
           Value: Byzantium | SOC Subnet
@@ -231,16 +195,11 @@ Outputs:
     Export:
       Name: !Sub '${AWS::StackName}-LANSubnet'
     Value: !Ref LANSubnet 
-  VioletSubnet:
-    Description: VioletSubnet ID
+  SOCSubnet:
+    Description: SOCSubnet ID
     Export:
-      Name: !Sub '${AWS::StackName}-VioletSubnet'
-    Value: !Ref VioletSubnet    
-  PurpleSubnet:
-    Description: PurpleSubnet ID
-    Export:
-      Name: !Sub '${AWS::StackName}-PurpleSubnet'
-    Value: !Ref PurpleSubnet
+      Name: !Sub '${AWS::StackName}-SOCSubnet'
+    Value: !Ref SOCSubnet    
   LANNI:
     Description: Network Interface for LAN
     Export:
