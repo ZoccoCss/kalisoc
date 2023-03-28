@@ -12,12 +12,13 @@ Consists of 2 files.
   
   2 - Launch KaliPurple-NAT-EC2 - This will configure the instances acording to the requirements
   
-  This is the diagram of the VPC
+  This is the diagram of the VPC. Reduced the number of subnets for simplicity. 
   
   
   
-  
-  ![new-designer](https://user-images.githubusercontent.com/47893772/227371698-4484616c-314f-46de-bb46-8b76dc111772.png)
+  ![template1-designer(1)](https://user-images.githubusercontent.com/47893772/228293082-51abc557-066f-4919-9a45-6056089b3058.png)
+
+
 
   
   
