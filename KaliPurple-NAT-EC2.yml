@@ -9,6 +9,7 @@ Metadata:
           - ExportVPCStackName
           - KeyName   
           - CreateNATGateway
+          - CreateLoadBalancer
       - Label:
           default: SSM
         Parameters:
@@ -59,7 +60,7 @@ Parameters:
   InstKaliPurple:
     Description: Kali Purple EC2 instance type
     Type: String
-    Default: t2.medium
+    Default: m4.xlarge
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -118,7 +119,7 @@ Parameters:
     ConstraintDescription: must be a valid EC2 instance type.        
 
   InstHeliotrope:
-    Description: Kali Purple EC2 instance type
+    Description: Kali Heliotrope EC2 instance type
     Type: String
     Default: t2.medium
     AllowedValues:
@@ -347,13 +348,22 @@ Parameters:
     ConstraintDescription: must specify true or false. 
     
   CreateNATGateway:
-    Description: Launch Instance
+    Description: Create a NAT Gateway
     Default: false
     Type: String
     AllowedValues:
       - true
       - false
     ConstraintDescription: must specify true or false.  
+    
+  CreateLoadBalancer:
+    Description: Create a Load Balancer
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.      
     
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
@@ -400,7 +410,9 @@ Conditions:
   CreateNATGatewayCondition: !Equals 
     - !Ref CreateNATGateway
     - true
-    
+  CreateLoadBalancerCondition: !Equals 
+    - !Ref CreateLoadBalancer
+    - true    
     
 Resources:
   NATGatewayEIP:
@@ -475,6 +487,7 @@ Resources:
             apt-get update -y
             apt-get install -y apache2
             echo "Healthy" > /var/www/html/index.html
+            echo "Hello Friends, Welcome to ec2 server whose IP is $(hostname -f)" > /var/www/html/test/index.html            
             systemctl start apache2  
             apt-get install xrdp -y
             systemctl enable xrdp --now
@@ -485,6 +498,11 @@ Resources:
     Type: AWS::EC2::Instance
     Condition: CreateKaliHeliotropeCondition    
     Properties:
+      BlockDeviceMappings: 
+        - 
+          DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 2048  
       InstanceType: !Ref InstHeliotrope
       IamInstanceProfile: !Ref SSMRoleName
       SubnetId:  
@@ -572,7 +590,20 @@ Resources:
       NetworkInterfaceId: 
         Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
         
- 
-        
+  TargetGroupKaliPurple:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Condition: CreateKaliPurpleCondition    
+    Properties:
+      Port: 80                               # Change to 5601
+      Protocol: HTTP
+      VpcId: !Sub ${ExportVPCStackName}-VPC
+
+  LoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    Condition: CreateLoadBalancerCondition
+    Properties:
+      Scheme: internal
+      Subnets:
+        - !Sub ${ExportVPCStackName}-LANSubnet
 
          
