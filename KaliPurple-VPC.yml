@@ -132,7 +132,64 @@ Resources:
         - IpProtocol: tcp
           FromPort: 3389
           ToPort: 3389
+          CidrIp: !Ref SSHLocation           
+        - IpProtocol: tcp
+          FromPort: 9443
+          ToPort: 9443
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 9392
+          ToPort: 9392
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 5601
+          ToPort: 5601
+          CidrIp: !Ref SSHLocation              
+        - IpProtocol: tcp
+          FromPort: 8443
+          ToPort: 8443
+          CidrIp: !Ref SSHLocation             
+        - IpProtocol: tcp
+          FromPort: 25
+          ToPort: 25
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 110
+          ToPort: 110
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 143
+          ToPort: 143
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 465
+          ToPort: 465
+          CidrIp: !Ref SSHLocation             
+         - IpProtocol: tcp
+          FromPort: 587
+          ToPort: 587
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 993
+          ToPort: 993
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 995
+          ToPort: 995
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 9200
+          ToPort: 9200
+          CidrIp: !Ref SSHLocation             
+        - IpProtocol: tcp
+          FromPort: 8220
+          ToPort: 8220
           CidrIp: !Ref SSHLocation  
+          
       Tags:
         - Key: Name
           Value: SSH Security Group
