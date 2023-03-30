@@ -1,9 +1,50 @@
 AWSTemplateFormatVersion: 2010-09-09
 
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Network
+        Parameters:
+          - ExportVPCStackName
+          - KeyName   
+          - CreateNATGateway
+      - Label:
+          default: SSM
+        Parameters:
+          - SSMRoleName
+          - SSMRoleNameGuacamole
+      - Label:
+          default: Kali Purple Parameters
+        Parameters:
+          - CreateKaliPurple
+          - InstKaliPurple
+          - AmazonImageIDKaliPurple
+      - Label:
+          default: Kali Heliotrope Parameters
+        Parameters:
+          - CreateKaliHeliotrope
+          - InstHeliotrope
+          - AmazonImageIDKaliHeliotrope
+      - Label:
+          default: Kali Guacamole Parameters
+        Parameters:
+          - CreateKaliGuacamole
+          - InstanceTypeGuacamole
+          - AmazonImageIDGuacamole
+      - Label:
+          default: Kali Byzantium Parameters
+        Parameters:
+          - CreateKaliByzantium
+          - InstanceTypeByzantium
+          - AmazonImageIDByzantium
+          - LANInterface
+
 Parameters:
   ExportVPCStackName:
     Description: Name of the Stack that Created the Kali Purple VPC
     Type: String
+    Default: vpc
         
   SSMRoleName:
     Description: Name of the IAM Role for SSM Management of the EC2 Instance
@@ -15,8 +56,8 @@ Parameters:
     Type: String   
     Default: KaliPurpleGuacamole
       
-  InstanceType:
-    Description: WebServer EC2 instance type
+  InstKaliPurple:
+    Description: Kali Purple EC2 instance type
     Type: String
     Default: t2.medium
     AllowedValues:
@@ -75,9 +116,71 @@ Parameters:
       - cc2.8xlarge
       - cg1.4xlarge
     ConstraintDescription: must be a valid EC2 instance type.        
-         
+
+  InstHeliotrope:
+    Description: Kali Purple EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.    
+    
+    
   InstanceTypeGuacamole:
-    Description: WebServer EC2 instance type
+    Description: Guacamole EC2 instance type
     Type: String
     Default: t2.medium
     AllowedValues:
@@ -138,9 +241,9 @@ Parameters:
     ConstraintDescription: must be a valid EC2 instance type.       
     
   InstanceTypeByzantium:
-    Description: WebServer EC2 instance type
+    Description: Byzantium EC2 instance type
     Type: String
-    Default: m4.large
+    Default: m3.large
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -198,12 +301,72 @@ Parameters:
       - cg1.4xlarge
     ConstraintDescription: must be a valid EC2 instance type.     
     
+  CreateKaliPurple:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.
+    
+  CreateKaliHeliotrope:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.
+    
+  CreateKaliByzantium:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.
+    
+  CreateKaliGuacamole:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.    
+    
+  LANInterface:
+    Description: Whether or not attach the LAN Interface
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false. 
+    
+  CreateNATGateway:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.  
+    
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: 'AWS::EC2::KeyPair::KeyName'
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
+    Default: parawin
 
-  AmazonImageID:
+  AmazonImageIDKaliPurple:
+    Description: The ID of the Amazon machine image (AMI) - Default is Kali
+    Type: String
+    Default: ami-000db6736082f3ee9
+    
+  AmazonImageIDKaliHeliotrope:
     Description: The ID of the Amazon machine image (AMI) - Default is Kali
     Type: String
     Default: ami-000db6736082f3ee9
@@ -214,13 +377,35 @@ Parameters:
     Default: ami-0d15b4289190035e4  
     
   AmazonImageIDByzantium:
-    Description: The ID of the Amazon machine image (AMI) - Bastion - Default is Guacamole
+    Description: The ID of the Amazon machine image (AMI) - Bastion - Default is OPNSense
     Type: String
     Default: ami-02d8b8fcc683ef5cc  
+ 
+Conditions:
+  CreateKaliPurpleCondition: !Equals 
+    - !Ref CreateKaliPurple
+    - true
+  CreateKaliHeliotropeCondition: !Equals 
+    - !Ref CreateKaliHeliotrope
+    - true
+  CreateKaliGuacamoleCondition: !Equals 
+    - !Ref CreateKaliGuacamole
+    - true
+  CreateKaliByzantiumCondition: !Equals 
+    - !Ref CreateKaliByzantium
+    - true
+  AttachLANInterface: !Equals 
+    - !Ref LANInterface
+    - true
+  CreateNATGatewayCondition: !Equals 
+    - !Ref CreateNATGateway
+    - true
+    
     
 Resources:
   NATGatewayEIP:
     Type: 'AWS::EC2::EIP'
+    Condition: CreateNATGatewayCondition
     Properties:
       Domain: VPC
       Tags:
@@ -229,6 +414,7 @@ Resources:
 
   NatGateway:
     Type: 'AWS::EC2::NatGateway'
+    Condition: CreateNATGatewayCondition
     Properties:
       AllocationId: !GetAtt NATGatewayEIP.AllocationId
       SubnetId: 
@@ -239,6 +425,7 @@ Resources:
 
   PrivateRouteTable:
     Type: 'AWS::EC2::RouteTable'
+    Condition: CreateNATGatewayCondition    
     Properties:
       Tags:
         - Key: Name
@@ -248,6 +435,7 @@ Resources:
 
   PrivateRoute:
     Type: 'AWS::EC2::Route'
+    Condition: CreateNATGatewayCondition
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway
@@ -255,112 +443,110 @@ Resources:
 
   PrivateRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Condition: CreateNATGatewayCondition
     Properties:
       RouteTableId: !Ref PrivateRouteTable
       SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-PurpleSubnet
-          
-  CompromizedRouteTableAssociation:
-    Type: 'AWS::EC2::SubnetRouteTableAssociation'
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable
-      SubnetId: 
         Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet
-          
-#  KaliPurple:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      InstanceType: !Ref InstanceType
-#      IamInstanceProfile: !Ref SSMRoleName
-#      SubnetId:  
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-PurpleSubnet  
-#      SecurityGroupIds:
-#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
-#      KeyName: !Ref KeyName
-#      ImageId: !Ref AmazonImageID 
-#      Tags:
-#        - Key: Name
-#          Value: EC2 | Kali-Purple
-#      UserData:
-#        Fn::Base64:
-#          !Sub |
-#            #!/bin/bash 
-#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-#            service sshd restart
-#            echo 'kali:kali2023' | chpasswd #Change Password Later
-#            sleep 15s # Waits 15 seconds.
-#            apt-get update -y
-#            apt-get install -y apache2
-#            echo "Healthy" > /var/www/html/index.html
-#            systemctl start apache2  
-#            apt-get install xrdp -y
-#            systemctl enable xrdp --now
+
+  KaliPurple:
+    Type: AWS::EC2::Instance
+    Condition: CreateKaliPurpleCondition      
+    Properties:
+      InstanceType: !Ref InstKaliPurple
+      IamInstanceProfile: !Ref SSMRoleName
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet  
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDKaliPurple 
+      Tags:
+        - Key: Name
+          Value: EC2 | Kali-Purple
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash 
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+            service sshd restart
+            echo 'kali:kali2023' | chpasswd #Change Password Later
+            sleep 15s # Waits 15 seconds.
+            apt-get update -y
+            apt-get install -y apache2
+            echo "Healthy" > /var/www/html/index.html
+            systemctl start apache2  
+            apt-get install xrdp -y
+            systemctl enable xrdp --now
                        
             
         
-#  KaliHeliotrope:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      InstanceType: !Ref InstanceType
-#      IamInstanceProfile: !Ref SSMRoleName
-#      SubnetId:  
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
-#      SecurityGroupIds:
-#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
-#      KeyName: !Ref KeyName
-#      ImageId: !Ref AmazonImageID 
-#      Tags:
-#        - Key: Name
-#          Value: EC2 | Kali-Heliotrope
-#      UserData:
-#        Fn::Base64:
-#          !Sub |
-#            #!/bin/bash
-#            apt-get update -y
-#            apt-get install -y apache2
-#            echo "Healthy" > /var/www/html/index.html
-#            systemctl start apache2  
-#            apt-get install xrdp -y
-#            systemctl enable xrdp --now
-#            wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
-#            apt-get install kali-autopilot -y
-#            apt-get install -y rsyslog
-#            mkdir /tmp/ssm
-#            cd /tmp/ssm
-#            wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
-#            dpkg -i amazon-ssm-agent.deb
-#            systemctl enable amazon-ssm-agent
-#            systemctl start amazon-ssm-agent
+  KaliHeliotrope:
+    Type: AWS::EC2::Instance
+    Condition: CreateKaliHeliotropeCondition    
+    Properties:
+      InstanceType: !Ref InstHeliotrope
+      IamInstanceProfile: !Ref SSMRoleName
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDKaliHeliotrope 
+      Tags:
+        - Key: Name
+          Value: EC2 | Kali-Heliotrope
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            apt-get update -y
+            apt-get install -y apache2
+            echo "Healthy" > /var/www/html/index.html
+            systemctl start apache2  
+            apt-get install xrdp -y
+            systemctl enable xrdp --now
+            wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+            apt-get install kali-autopilot -y
+            apt-get install -y rsyslog
+            mkdir /tmp/ssm
+            cd /tmp/ssm
+            wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+            dpkg -i amazon-ssm-agent.deb
+            systemctl enable amazon-ssm-agent
+            systemctl start amazon-ssm-agent
             
             
-#  GuacamoleBastion:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      InstanceType: !Ref InstanceTypeGuacamole
-#      IamInstanceProfile: !Ref SSMRoleNameGuacamole
-#      SubnetId:  
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
-#      SecurityGroupIds:
-#        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
-#      KeyName: !Ref KeyName
-#      ImageId: !Ref AmazonImageIDGuacamole 
-#      Tags:
-#        - Key: Name
-#          Value: EC2 | Guacamole Bastion
-#      UserData:
-#        Fn::Base64:
-#          !Sub |
-#            #!/bin/bash
-#            apt-get update -y
-            
+  GuacamoleBastion:
+    Type: AWS::EC2::Instance
+    Condition: CreateKaliGuacamoleCondition    
+    Properties:
+      InstanceType: !Ref InstanceTypeGuacamole
+      IamInstanceProfile: !Ref SSMRoleNameGuacamole
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDGuacamole 
+      Tags:
+        - Key: Name
+          Value: EC2 | Guacamole Bastion
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            apt-get update -y
+           
   Byzantium:
     Type: AWS::EC2::Instance
+    Condition: CreateKaliByzantiumCondition    
     Properties:
       BlockDeviceMappings: 
-       - 
-         DeviceName: /dev/sda1
-         Ebs:
-           VolumeSize: 128  
+        - 
+          DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 128  
       InstanceType: !Ref InstanceTypeByzantium
       IamInstanceProfile: !Ref SSMRoleName
       SubnetId:  
@@ -377,53 +563,16 @@ Resources:
           !Sub |
             #!/bin/bash
 
-#  ByzLANAttachmnet:            
-#    Type: AWS::EC2::NetworkInterfaceAttachment
-#    Properties: 
-#      InstanceId: !Ref Byzantium
-#      DeviceIndex: 1
-#      NetworkInterfaceId: 
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
+  ByzLANAttachmnet:            
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Condition: AttachLANInterface
+    Properties: 
+      InstanceId: !Ref Byzantium
+      DeviceIndex: 1
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
         
-#  ByzSOCIttachmnet:            
-#    Type: AWS::EC2::NetworkInterfaceAttachment
-#    Properties: 
-#      InstanceId: !Ref Byzantium
-#      DeviceIndex: 2
-#      NetworkInterfaceId: 
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-SOCNI 
-
-#  ByzGatewayEIP:
-#    Type: 'AWS::EC2::EIP'
-#    Properties:
-#      Domain: VPC
-#      Tags:
-#        - Key: Name
-#          Value: NatEIP   
-#  ByzEIPAssoc:          
-#    Type: AWS::EC2::EIPAssociation
-#    Properties: 
-#      AllocationId: String
-#      EIP: !Ref ByzGatewayEIP
-#      InstanceId: !Ref Byzantium
-#      NetworkInterfaceId: !Ref ByzWANNIttachmnet
-#      PrivateIpAddress: String          
-        
-#  BysClusterttachmnet:            
-#    Type: AWS::EC2::NetworkInterfaceAttachment
-#    Properties: 
-#      InstanceId: !Ref Byzantium
-#      DeviceIndex: 2
-#      NetworkInterfaceId: 
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-ClusterNI  
-        
-#  BysMGMAttachmnet:            
-#    Type: AWS::EC2::NetworkInterfaceAttachment
-#    Properties: 
-#      InstanceId: !Ref Byzantium
-#      DeviceIndex: 3
-#      NetworkInterfaceId: 
-#        Fn::ImportValue: !Sub ${ExportVPCStackName}-MGMTNI   
+ 
         
 
          
