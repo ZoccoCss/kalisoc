@@ -10,7 +10,7 @@ Consists of 2 files.
 
   1 - Launch KaliPurple-VPC.yml - This will configure the VPC. Used the same IP ranges suggested in the documentation. 
   
-  2 - Launch KaliPurple-NAT-EC2 - This will configure the instances acording to the requirements
+  2 - Launch KaliPurple-NAT-EC2 - This will configure the instances according to the requirements
   
   This is the diagram of the VPC. Reduced the number of subnets for simplicity. 
   
@@ -26,10 +26,12 @@ Consists of 2 files.
   
   
   
-  Please note that this repository is still work in progress. At this point, the VPC has been created succesfully. In regards to the VMs, the KaliPurple and the KaliHeliotrope are created but haven't been totally configured yet. A Guacamole Bastion has also been created but not yet configured. 
+  Please note that this repository is still work in progress. At this point, the VPC has been created successfully. In regards to the VMs, the KaliPurple and the KaliHeliotrope are created but haven't been totally configured yet. A Guacamole Bastion has also been created but not yet configured. 
   
   
   There are no Kali Purple images in AWS at this moment, so will use the image available and install the required packages. 
+  
+  The configuration on the machines is very time consuming, I'll be creating AMIs images and making them publicly available to simplify and speed up the set up process.  
   
   
   Reference:  https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
