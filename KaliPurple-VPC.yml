@@ -12,11 +12,8 @@ Metadata:
         Parameters:
           - PublicSubnetCIDR
           - LANSubnetCIDR
-          - SOCSubnetCIDR
-          - PurpleSubnetCIDR
-          - EminenceSubnetCIDR
       - Label:
-          default: SSH CIDR
+          default: SSH
         Parameters:
           - SSHLocation
                     
@@ -41,11 +38,7 @@ Parameters:
     Default: 192.168.1.0/24
     Description: Please Enter the IP Range of the Public Subnet
     Type: String
-  SOCSubnetCIDR:
-    Default: 192.168.2.0/24
-    Description: Please Enter the IP Range of the DMZ Subnet
-    Type: String
-      
+
     
 Resources:
   KaliVPC:
@@ -84,21 +77,8 @@ Resources:
         - Key: Name
           Value: LAN Subnet
       VpcId: !Ref KaliVPC
-
-  SOCSubnet:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Select 
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Ref SOCSubnetCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: Violet Subnet
-      VpcId: !Ref KaliVPC
-
-   IGW:
+      
+  IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
@@ -170,14 +150,6 @@ Resources:
       Tags: 
         - Key: Name
           Value: Byzantium | LAN Subnet          
-  SOCNI:  
-    Type: 'AWS::EC2::NetworkInterface'
-    Properties: 
-      Description: Network Interface for SOC
-      SubnetId: !Ref SOCSubnet
-      Tags: 
-        - Key: Name
-          Value: Byzantium | SOC Subnet
    
 Outputs:
   KaliVPC:
@@ -195,21 +167,12 @@ Outputs:
     Export:
       Name: !Sub '${AWS::StackName}-LANSubnet'
     Value: !Ref LANSubnet 
-  SOCSubnet:
-    Description: SOCSubnet ID
-    Export:
-      Name: !Sub '${AWS::StackName}-SOCSubnet'
-    Value: !Ref SOCSubnet    
   LANNI:
     Description: Network Interface for LAN
     Export:
       Name: !Sub '${AWS::StackName}-LANNI'
     Value: !Ref LANNI  
-  SOCNI:
-    Description: Network Interface for SOC
-    Export:
-      Name: !Sub '${AWS::StackName}-SOCNI'
-    Value: !Ref SOCNI         
+         
   SSHSecurityGroup:
     Description: SSHSecurityGroup ID
     Export:
