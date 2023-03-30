@@ -16,7 +16,8 @@ Consists of 2 files.
   
   
   
-  ![template1-designer(1)](https://user-images.githubusercontent.com/47893772/228293082-51abc557-066f-4919-9a45-6056089b3058.png)
+
+![template1-designer(3)](https://user-images.githubusercontent.com/47893772/228842910-7b7add90-86e2-418e-9ad9-3bf79295bec6.png)
 
 
 
@@ -26,7 +27,7 @@ Consists of 2 files.
   
   
   
-  Please note that this repository is still work in progress. At this point, the VPC has been created successfully. In regards to the VMs, the KaliPurple and the KaliHeliotrope are created but haven't been totally configured yet. A Guacamole Bastion has also been created but not yet configured. 
+  Please note that this repository is still work in progress. At this point, the VPC has been created successfully. In regards to the VMs, the KaliPurple and the KaliHeliotrope are created but haven't been totally configured yet. A Guacamole Bastion has also been created but not yet configured. The Bizantium VM was created and configured.
   
   
   There are no Kali Purple images in AWS at this moment, so will use the image available and install the required packages. 
