@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: This template creates a VPC for Kali Linux Purple SOC Lab 
+Description: This template creates a VPC with it's subnets for the Kali Linux Purple SOC Lab. 
 Metadata:
   'AWS::CloudFormation::Interface':
     ParameterGroups:
@@ -12,6 +12,7 @@ Metadata:
         Parameters:
           - PublicSubnetCIDR
           - LANSubnetCIDR
+          - SOCSubnetCIDR
       - Label:
           default: SSH
         Parameters:
@@ -32,11 +33,15 @@ Parameters:
     Type: String
   PublicSubnetCIDR:
     Default: 192.168.0.0/24
-    Description: Please Enter the IP Range of the Private Subnet
+    Description: Please Enter the IP Range of the Public Subnet
     Type: String
   LANSubnetCIDR:
     Default: 192.168.1.0/24
-    Description: Please Enter the IP Range of the Public Subnet
+    Description: Please Enter the IP Range of the LAN Subnet
+    Type: String
+  SOCSubnetCIDR:
+    Default: 192.168.253.0/24
+    Description: Please Enter the IP Range of the SOC Subnet
     Type: String
 
     
@@ -50,7 +55,7 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: KaliVPC
+          Value: Kali VPC | KaliVPC
 
   PublicSubnet:
     Type: 'AWS::EC2::Subnet'
@@ -62,7 +67,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: Public
+          Value: Kali VPC | Public Subnet
       VpcId: !Ref KaliVPC
           
   LANSubnet:
@@ -75,7 +80,20 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: LAN Subnet
+          Value: Kali VPC | LAN Subnet
+      VpcId: !Ref KaliVPC
+      
+  SOCSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Ref SOCSubnetCIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Kali VPC | SOC Subnet
       VpcId: !Ref KaliVPC
       
   IGW:
@@ -83,7 +101,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: InternetGateway
+          Value: Kali VPC | InternetGateway
 
   IGWAttacment:
     Type: 'AWS::EC2::VPCGatewayAttachment'
@@ -96,7 +114,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: PublicRouteTable
+          Value: Kali VPC | PublicRouteTable
       VpcId: !Ref KaliVPC
 
   PublicRoute:
@@ -112,10 +130,11 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet
       
-  SSHSecurityGroup:
+      
+  OpenSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupDescription: SSH Security Group
+      GroupDescription: Open Security Group
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -169,7 +188,7 @@ Resources:
           FromPort: 465
           ToPort: 465
           CidrIp: !Ref SSHLocation             
-         - IpProtocol: tcp
+        - IpProtocol: tcp
           FromPort: 587
           ToPort: 587
           CidrIp: !Ref SSHLocation
@@ -189,25 +208,89 @@ Resources:
           FromPort: 8220
           ToPort: 8220
           CidrIp: !Ref SSHLocation  
-          
       Tags:
         - Key: Name
-          Value: SSH Security Group
+          Value: Open Security Group
       VpcId: !Ref KaliVPC
 
   LANNI:  
     Type: 'AWS::EC2::NetworkInterface'
     Properties: 
-      Description: Network Interface for LAN
+      Description: Bizantium Network Interface for LAN
       SourceDestCheck: false
       SubnetId: !Ref LANSubnet
       GroupSet:
-        - !Ref SSHSecurityGroup
+        - !Ref OpenSecurityGroup
       PrivateIpAddress: 192.168.1.10        
       Tags: 
         - Key: Name
-          Value: Byzantium | LAN Subnet          
-   
+          Value: Kali SOC | Bizantium LAN Network Interface         
+          
+  SOCNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Bizantium Network Interface for SOC
+      SourceDestCheck: false
+      SubnetId: !Ref SOCSubnet
+      GroupSet:
+        - !Ref OpenSecurityGroup
+      PrivateIpAddress: 192.168.253.101        
+      Tags: 
+        - Key: Name
+          Value: Kali SOC | Bizantium SOC Network Interface      
+
+  HelioNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Heliotrope Network Interface for LAN
+      SourceDestCheck: false
+      SubnetId: !Ref LANSubnet
+      GroupSet:
+        - !Ref OpenSecurityGroup
+      PrivateIpAddress: 192.168.1.20        
+      Tags: 
+        - Key: Name
+          Value: Kali SOC | Heliotrope LAN Network Interface   
+
+  PurpleNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Kali-Purple Network Interface for SOC
+      SourceDestCheck: false
+      SubnetId: !Ref SOCSubnet
+      GroupSet:
+        - !Ref OpenSecurityGroup
+      PrivateIpAddress: 192.168.253.105        
+      Tags: 
+        - Key: Name
+          Value: Kali SOC | Kali-Purple SOC Network Interface   
+          
+  VioletNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Kali-Violet Network Interface for SOC
+      SourceDestCheck: false
+      SubnetId: !Ref SOCSubnet
+      GroupSet:
+        - !Ref OpenSecurityGroup
+      PrivateIpAddress: 192.168.253.107        
+      Tags: 
+        - Key: Name
+          Value: Kali SOC | Kali-Violet SOC Network Interface   
+          
+  EminenceNI:  
+    Type: 'AWS::EC2::NetworkInterface'
+    Properties: 
+      Description: Eminence Network Interface for SOC
+      SourceDestCheck: false
+      SubnetId: !Ref SOCSubnet
+      GroupSet:
+        - !Ref OpenSecurityGroup
+      PrivateIpAddress: 192.168.253.103        
+      Tags: 
+        - Key: Name
+          Value: Kali SOC | Eminence SOC Network Interface   
+          
 Outputs:
   KaliVPC:
     Description: KaliVPC ID
@@ -224,15 +307,44 @@ Outputs:
     Export:
       Name: !Sub '${AWS::StackName}-LANSubnet'
     Value: !Ref LANSubnet 
+  SOCSubnet:
+    Description: Public ID
+    Export:
+      Name: !Sub '${AWS::StackName}-SOCSubnet'
+    Value: !Ref SOCSubnet    
   LANNI:
     Description: Network Interface for LAN
     Export:
       Name: !Sub '${AWS::StackName}-LANNI'
     Value: !Ref LANNI  
-         
-  SSHSecurityGroup:
-    Description: SSHSecurityGroup ID
+  SOCNI:
+    Description: Network Interface for SOC
     Export:
-      Name: !Sub '${AWS::StackName}-SSHSecurityGroup'
-    Value: !Ref SSHSecurityGroup   
+      Name: !Sub '${AWS::StackName}-SOCNI'
+    Value: !Ref SOCNI             
+  HelioNI:
+    Description: Network Interface for Heliotrope
+    Export:
+      Name: !Sub '${AWS::StackName}-HelioNI'
+    Value: !Ref HelioNI   
+  PurpleNI:
+    Description: Network Interface for Kali-Purple
+    Export:
+      Name: !Sub '${AWS::StackName}-PurpleNI'
+    Value: !Ref PurpleNI   
+  VioletNI:
+    Description: Network Interface for Kali-Violet
+    Export:
+      Name: !Sub '${AWS::StackName}-VioletNI'
+    Value: !Ref VioletNI   
+  EminenceNI:
+    Description: Network Interface for Kali-Eminence
+    Export:
+      Name: !Sub '${AWS::StackName}-EminenceNI'
+    Value: !Ref EminenceNI  
+  OpenSecurityGroup:
+    Description: OpenSecurityGroup ID
+    Export:
+      Name: !Sub '${AWS::StackName}-OpenSecurityGroup'
+    Value: !Ref OpenSecurityGroup   
     
