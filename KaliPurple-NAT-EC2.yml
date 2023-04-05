@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-
+Description: This template creates instances for the SOC Lab acording to the  user's requierements.
 Metadata:
   'AWS::CloudFormation::Interface':
     ParameterGroups:
@@ -9,30 +9,11 @@ Metadata:
           - ExportVPCStackName
           - KeyName   
           - CreateNATGateway
-          - CreateLoadBalancer
       - Label:
           default: SSM
         Parameters:
           - SSMRoleName
           - SSMRoleNameGuacamole
-      - Label:
-          default: Kali Purple Parameters
-        Parameters:
-          - CreateKaliPurple
-          - InstKaliPurple
-          - AmazonImageIDKaliPurple
-      - Label:
-          default: Kali Heliotrope Parameters
-        Parameters:
-          - CreateKaliHeliotrope
-          - InstHeliotrope
-          - AmazonImageIDKaliHeliotrope
-      - Label:
-          default: Kali Guacamole Parameters
-        Parameters:
-          - CreateKaliGuacamole
-          - InstanceTypeGuacamole
-          - AmazonImageIDGuacamole
       - Label:
           default: Kali Byzantium Parameters
         Parameters:
@@ -40,6 +21,45 @@ Metadata:
           - InstanceTypeByzantium
           - AmazonImageIDByzantium
           - LANInterface
+      - Label:
+          default: Kali Purple Parameters
+        Parameters:
+          - CreateKaliPurple
+          - InstKaliPurple
+          - AmazonImageIDKaliPurple          
+      - Label:
+          default: Kali-Violet Parameters
+        Parameters:
+          - CreateKaliViolet
+          - InstViolet
+          - AmazonImageIDKaliViolet
+      - Label:
+          default: Kali Eminence Parameters
+        Parameters:
+          - CreateKaliEminece
+          - InstEminence
+          - AmazonImageIDKaliEminence
+      - Label:
+          default: Kali Heliotrope Parameters
+        Parameters:
+          - CreateKaliHeliotrope
+          - InstHeliotrope
+          - AmazonImageIDKaliHeliotrope       
+      - Label:
+          default: Kali Pearly Parameters
+        Parameters:
+          - CreateKaliPearly
+          - InstPearly
+          - AmazonImageIDKaliPearly       
+      - Label:
+          default: Kali Guacamole Parameters
+        Parameters:
+          - CreateKaliGuacamole
+          - InstanceTypeGuacamole
+          - AmazonImageIDGuacamole
+      
+          
+          
 
 Parameters:
   ExportVPCStackName:
@@ -60,7 +80,7 @@ Parameters:
   InstKaliPurple:
     Description: Kali Purple EC2 instance type
     Type: String
-    Default: m4.xlarge
+    Default: t2.medium
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -183,7 +203,7 @@ Parameters:
   InstanceTypeGuacamole:
     Description: Guacamole EC2 instance type
     Type: String
-    Default: t2.medium
+    Default: t2.medium #The AWS default type is way too large 
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -244,7 +264,7 @@ Parameters:
   InstanceTypeByzantium:
     Description: Byzantium EC2 instance type
     Type: String
-    Default: m3.large
+    Default: t2.medium
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -301,8 +321,218 @@ Parameters:
       - cc2.8xlarge
       - cg1.4xlarge
     ConstraintDescription: must be a valid EC2 instance type.     
+
+  InstViolet:
+    Description: Kali-Violet EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.  
+
+  InstEminence:
+    Description: Eminence EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.  
     
+  InstPearly:
+    Description: Byzantium EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues:
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - hi1.4xlarge
+      - hs1.8xlarge
+      - cr1.8xlarge
+      - cc2.8xlarge
+      - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.  
+      
   CreateKaliPurple:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.
+
+  CreateKaliViolet:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.
+    
+  CreateKaliEminece:
+    Description: Launch Instance
+    Default: false
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: must specify true or false.
+    
+  CreateKaliPearly:
     Description: Launch Instance
     Default: false
     Type: String
@@ -356,15 +586,6 @@ Parameters:
       - false
     ConstraintDescription: must specify true or false.  
     
-  CreateLoadBalancer:
-    Description: Create a Load Balancer
-    Default: false
-    Type: String
-    AllowedValues:
-      - true
-      - false
-    ConstraintDescription: must specify true or false.      
-    
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: 'AWS::EC2::KeyPair::KeyName'
@@ -372,6 +593,21 @@ Parameters:
     Default: parawin
 
   AmazonImageIDKaliPurple:
+    Description: The ID of the Amazon machine image (AMI) - Default is Kali
+    Type: String
+    Default: ami-000db6736082f3ee9
+    
+  AmazonImageIDKaliViolet:
+    Description: The ID of the Amazon machine image (AMI) - Default is Kali
+    Type: String
+    Default: ami-000db6736082f3ee9
+    
+  AmazonImageIDKaliEminence:
+    Description: The ID of the Amazon machine image (AMI) - Default is Kali
+    Type: String
+    Default: ami-000db6736082f3ee9
+    
+  AmazonImageIDKaliPearly:
     Description: The ID of the Amazon machine image (AMI) - Default is Kali
     Type: String
     Default: ami-000db6736082f3ee9
@@ -395,6 +631,15 @@ Conditions:
   CreateKaliPurpleCondition: !Equals 
     - !Ref CreateKaliPurple
     - true
+  CreateKaliVioletCondition: !Equals 
+    - !Ref CreateKaliViolet
+    - true
+  CreateKaliEminenceCondition: !Equals 
+    - !Ref CreateKaliEminece
+    - true
+  CreateKaliPearlyCondition: !Equals 
+    - !Ref CreateKaliPearly
+    - true
   CreateKaliHeliotropeCondition: !Equals 
     - !Ref CreateKaliHeliotrope
     - true
@@ -410,9 +655,9 @@ Conditions:
   CreateNATGatewayCondition: !Equals 
     - !Ref CreateNATGateway
     - true
-  CreateLoadBalancerCondition: !Equals 
-    - !Ref CreateLoadBalancer
-    - true    
+  NotCreateNATGatewayCondition: !Equals 
+    - !Ref CreateNATGateway
+    - false
     
 Resources:
   NATGatewayEIP:
@@ -422,7 +667,7 @@ Resources:
       Domain: VPC
       Tags:
         - Key: Name
-          Value: NatEIP
+          Value: Kali SOC | NatEIP
 
   NatGateway:
     Type: 'AWS::EC2::NatGateway'
@@ -433,15 +678,15 @@ Resources:
         Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
       Tags:
         - Key: Name
-          Value: NAT Gateway Public Subnet
+          Value: Kali SOC | NAT Gateway Public Subnet
 
   PrivateRouteTable:
     Type: 'AWS::EC2::RouteTable'
-    Condition: CreateNATGatewayCondition    
+    Condition: CreateNATGatewayCondition
     Properties:
       Tags:
         - Key: Name
-          Value: Private Route Table 
+          Value: Kali SOC | Private Route Table 
       VpcId: 
         Fn::ImportValue: !Sub ${ExportVPCStackName}-VPC
 
@@ -453,29 +698,96 @@ Resources:
       NatGatewayId: !Ref NatGateway
       RouteTableId: !Ref PrivateRouteTable
 
-  PrivateRouteTableAssociation:
+  PrivateRouteTableAssociationLAN:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Condition: CreateNATGatewayCondition
     Properties:
       RouteTableId: !Ref PrivateRouteTable
       SubnetId:  
         Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet
+        
+  PrivateRouteTableAssociationSOC:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Condition: CreateNATGatewayCondition
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-SOCSubnet
+   
+  PrivateRouteTable2LAN:
+    Type: 'AWS::EC2::RouteTable'
+    Condition: NotCreateNATGatewayCondition
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Kali SOC | Private Route Table LAN
+      VpcId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-VPC
 
+  PrivateRoute2LAN:
+    Type: 'AWS::EC2::Route'
+    Condition: NotCreateNATGatewayCondition
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId: !Ref PrivateRouteTable2LAN
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI
+      
+  PrivateRouteTableAssociation2LAN:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Condition: NotCreateNATGatewayCondition
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2LAN
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet
+        
+  PrivateRouteTable2SOC:
+    Type: 'AWS::EC2::RouteTable'
+    Condition: NotCreateNATGatewayCondition
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Kali SOC | Private Route Table SOC
+      VpcId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-VPC
+
+  PrivateRoute2SOC:
+    Type: 'AWS::EC2::Route'
+    Condition: NotCreateNATGatewayCondition
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId: !Ref PrivateRouteTable2SOC
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-SOCNI
+      
+  PrivateRouteTableAssociation2SOC:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Condition: NotCreateNATGatewayCondition
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2SOC
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-SOCSubnet   
+   
   KaliPurple:
     Type: AWS::EC2::Instance
     Condition: CreateKaliPurpleCondition      
     Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 500     # Specifications recomends 2048 may need to increase as necessary
+            DeleteOnTermination: true  
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          NetworkInterfaceId: 
+            Fn::ImportValue: !Sub ${ExportVPCStackName}-PurpleNI
       InstanceType: !Ref InstKaliPurple
       IamInstanceProfile: !Ref SSMRoleName
-      SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet  
-      SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
       KeyName: !Ref KeyName
       ImageId: !Ref AmazonImageIDKaliPurple 
       Tags:
         - Key: Name
-          Value: EC2 | Kali-Purple
+          Value: Kali SOC | Kali-Purple
       UserData:
         Fn::Base64:
           !Sub |
@@ -483,57 +795,120 @@ Resources:
             sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
             service sshd restart
             echo 'kali:kali2023' | chpasswd #Change Password Later
-            sleep 15s # Waits 15 seconds.
-            apt-get update -y
-            apt-get install -y apache2
-            echo "Healthy" > /var/www/html/index.html
-            echo "Hello Friends, Welcome to ec2 server whose IP is $(hostname -f)" > /var/www/html/test/index.html            
-            systemctl start apache2  
-            apt-get install xrdp -y
-            systemctl enable xrdp --now
-                       
+
+  KaliViolet:
+    Type: AWS::EC2::Instance
+    Condition: CreateKaliVioletCondition     
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 64     # Specifications recomends 128 may need to increase as necessary
+            DeleteOnTermination: true    
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          NetworkInterfaceId: 
+            Fn::ImportValue: !Sub ${ExportVPCStackName}-VioletNI
+      InstanceType: !Ref InstViolet
+      IamInstanceProfile: !Ref SSMRoleName
+      SourceDestCheck: false
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDKaliViolet
+      Tags:
+        - Key: Name
+          Value: Kali SOC | Kali-Violet
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash 
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+            service sshd restart
+            echo 'kali:kali2023' | chpasswd #Change Password Later
             
-        
+  KaliEminece:
+    Type: AWS::EC2::Instance
+    Condition: CreateKaliEminenceCondition     
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 256     # Specifications recomends 512 may need to increase as necessary
+            DeleteOnTermination: true    
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          NetworkInterfaceId: 
+            Fn::ImportValue: !Sub ${ExportVPCStackName}-EminenceNI
+      InstanceType: !Ref InstViolet
+      IamInstanceProfile: !Ref SSMRoleName
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDKaliViolet
+      Tags:
+        - Key: Name
+          Value: Kali SOC | Kali-Eminence
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash 
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+            service sshd restart
+            echo 'kali:kali2023' | chpasswd #Change Password Later
+            
+  KaliPearly:
+    Type: AWS::EC2::Instance
+    Condition: CreateKaliPearlyCondition     
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 30     # No Specifications
+            DeleteOnTermination: true    
+      InstanceType: !Ref InstPearly
+      IamInstanceProfile: !Ref SSMRoleName
+      SourceDestCheck: false
+      SubnetId:  
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-LANSubnet  
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-OpenSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmazonImageIDKaliPearly
+      Tags:
+        - Key: Name
+          Value: Kali SOC | Kali-Pearly
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash 
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+            service sshd restart
+            echo 'kali:kali2023' | chpasswd #Change Password Later
+            
   KaliHeliotrope:
     Type: AWS::EC2::Instance
     Condition: CreateKaliHeliotropeCondition    
     Properties:
-      BlockDeviceMappings: 
-        - 
-          DeviceName: /dev/sda1
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
           Ebs:
-            VolumeSize: 2048  
+            VolumeSize: 64
+            DeleteOnTermination: true
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          NetworkInterfaceId: 
+            Fn::ImportValue: !Sub ${ExportVPCStackName}-HelioNI
       InstanceType: !Ref InstHeliotrope
       IamInstanceProfile: !Ref SSMRoleName
-      SubnetId:  
-        Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
-      SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
       KeyName: !Ref KeyName
       ImageId: !Ref AmazonImageIDKaliHeliotrope 
       Tags:
         - Key: Name
-          Value: EC2 | Kali-Heliotrope
+          Value: Kali SOC | Kali-Heliotrope
       UserData:
         Fn::Base64:
           !Sub |
             #!/bin/bash
-            apt-get update -y
-            apt-get install -y apache2
-            echo "Healthy" > /var/www/html/index.html
-            systemctl start apache2  
-            apt-get install xrdp -y
-            systemctl enable xrdp --now
-            wget -P /etc/polkit-1/localauthority/50-local.d https://gitlab.com/kalilinux/documentation/kali-purple/-/raw/main/1001_kali-heliotrope/overlays/etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
-            apt-get install kali-autopilot -y
-            apt-get install -y rsyslog
-            mkdir /tmp/ssm
-            cd /tmp/ssm
-            wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
-            dpkg -i amazon-ssm-agent.deb
-            systemctl enable amazon-ssm-agent
-            systemctl start amazon-ssm-agent
-            
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+            service sshd restart
+            echo 'kali:kali2023' | chpasswd #Change Password Later
             
   GuacamoleBastion:
     Type: AWS::EC2::Instance
@@ -541,15 +916,16 @@ Resources:
     Properties:
       InstanceType: !Ref InstanceTypeGuacamole
       IamInstanceProfile: !Ref SSMRoleNameGuacamole
+      SourceDestCheck: false
       SubnetId:  
         Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
       SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-OpenSecurityGroup
       KeyName: !Ref KeyName
       ImageId: !Ref AmazonImageIDGuacamole 
       Tags:
         - Key: Name
-          Value: EC2 | Guacamole Bastion
+          Value: Kali SOC | Guacamole Bastion
       UserData:
         Fn::Base64:
           !Sub |
@@ -560,22 +936,23 @@ Resources:
     Type: AWS::EC2::Instance
     Condition: CreateKaliByzantiumCondition    
     Properties:
-      BlockDeviceMappings: 
-        - 
-          DeviceName: /dev/sda1
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
           Ebs:
-            VolumeSize: 128  
+            VolumeSize: 128
+            DeleteOnTermination: true
       InstanceType: !Ref InstanceTypeByzantium
       IamInstanceProfile: !Ref SSMRoleName
+      SourceDestCheck: false
       SubnetId:  
         Fn::ImportValue: !Sub ${ExportVPCStackName}-PublicSubnet
       SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${ExportVPCStackName}-SSHSecurityGroup
+        - Fn::ImportValue: !Sub ${ExportVPCStackName}-OpenSecurityGroup
       KeyName: !Ref KeyName
       ImageId: !Ref AmazonImageIDByzantium 
       Tags:
         - Key: Name
-          Value: EC2 | Byzantium
+          Value: Kali SOC | Byzantium
       UserData:
         Fn::Base64:
           !Sub |
@@ -589,21 +966,15 @@ Resources:
       DeviceIndex: 1
       NetworkInterfaceId: 
         Fn::ImportValue: !Sub ${ExportVPCStackName}-LANNI    
-        
-  TargetGroupKaliPurple:
-    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
-    Condition: CreateKaliPurpleCondition    
-    Properties:
-      Port: 80                               # Change to 5601
-      Protocol: HTTP
-      VpcId: !Sub ${ExportVPCStackName}-VPC
 
-  LoadBalancer:
-    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
-    Condition: CreateLoadBalancerCondition
-    Properties:
-      Scheme: internal
-      Subnets:
-        - !Sub ${ExportVPCStackName}-LANSubnet
+  ByzSOCAttachmnet:            
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Condition: AttachLANInterface
+    Properties: 
+      InstanceId: !Ref Byzantium
+      DeviceIndex: 2
+      NetworkInterfaceId: 
+        Fn::ImportValue: !Sub ${ExportVPCStackName}-SOCNI  
+
 
          
