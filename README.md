@@ -44,7 +44,7 @@ There are no Kali Purple images in AWS at this moment, so I used a regular Kali 
  
 All the other packages were readily available on kali. My initial intent was to make the final AMIs images publicly available to simplify and speed up the set up process. However, the log collection of the firewall makes it risky at this time. If I'm able to clean up the logs I'll reconsider this in the future.
  
-The cost of this setup is around $6/day. I use it for 5 hrs each day and stop the instances when not using them.
+The cost of this setup is around $7/day. I use it for 5 hrs each day and stop the instances when not using them.
 
 ![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
 
