@@ -80,7 +80,7 @@ Parameters:
   InstKaliPurple:
     Description: Kali Purple EC2 instance type
     Type: String
-    Default: t2.medium
+    Default: r5a.large
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -123,6 +123,7 @@ Parameters:
       - r3.2xlarge
       - r3.4xlarge
       - r3.8xlarge
+      - r5a.large
       - i2.xlarge
       - i2.2xlarge
       - i2.4xlarge
@@ -325,7 +326,7 @@ Parameters:
   InstViolet:
     Description: Kali-Violet EC2 instance type
     Type: String
-    Default: t2.medium
+    Default: t3a.xlarge
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -333,6 +334,7 @@ Parameters:
       - t2.small
       - t2.medium
       - t2.large
+      - t3a.xlarge
       - m1.small
       - m1.medium
       - m1.large
@@ -386,7 +388,7 @@ Parameters:
   InstEminence:
     Description: Eminence EC2 instance type
     Type: String
-    Default: t2.medium
+    Default: t3a.2xlarge
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -394,6 +396,7 @@ Parameters:
       - t2.small
       - t2.medium
       - t2.large
+      - t3a.2xlarge
       - m1.small
       - m1.medium
       - m1.large
@@ -445,7 +448,7 @@ Parameters:
     ConstraintDescription: must be a valid EC2 instance type.  
     
   InstPearly:
-    Description: Byzantium EC2 instance type
+    Description: Pearly EC2 instance type
     Type: String
     Default: t2.medium
     AllowedValues:
