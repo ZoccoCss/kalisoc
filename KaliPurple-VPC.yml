@@ -212,6 +212,10 @@ Resources:
           FromPort: 1194
           ToPort: 1194
           CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 24
+          ToPort: 24
+          CidrIp: !Ref SSHLocation          
       Tags:
         - Key: Name
           Value: Open Security Group
