@@ -68,6 +68,7 @@ You can use Kali Linux as your attack platform on the kali-pearly instance and r
 Please note that this repository is still work in progress.
 
 Reference: https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
+
 ## Tips
 - The Byzantium machine needs 3 interfaces (LAN, WAN, and SOC). AWS may get them mixed up when it launches. Obtain the MAC address of the interfaces in the interfaces section of AWS and assign them to the appropriate subnet in the interfaces menu of OPNsense.
 
