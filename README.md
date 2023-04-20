@@ -40,25 +40,22 @@ The instance types defaults are the minimum required for each to work. You can c
  
 ## Configuration
  
-There are no Kali Purple images in AWS at this moment, so I used a regular Kali Linux image and installed only the required packages manually. When I was creating these instances, the elastic stack was not available in kali. Therefore, I used the www.elastic.co documentation.
- 
-All the other packages were readily available on kali. My initial intent was to make the final AMIs images publicly available to simplify and speed up the set up process. However, the log collection of the firewall makes it risky at this time. If I'm able to clean up the logs I'll reconsider this in the future.
- 
-The cost of this setup is around $7/day. I use it for 5 hrs each day and stop the instances when not using them.
+To set up the SOC, I could not find any Kali Purple images in AWS, so I used a regular Kali Linux image and manually installed only the required packages. Additionally, I followed the www.elastic.co documentation to install the Elastic stack, which was not available in Kali at the time.
+
+While I had originally planned to make the final AMI images publicly available via Kali to simplify the setup process, I discovered that AWS does not allow AMIs with product codes to be made public. Additionally, due to the current risk associated with the firewall's log collection, it is not advisable to share them publicly until logs that contain private information are cleared. Therefore, I will be creating images without product codes and ensure that any logs with personal information are cleared before sharing them in the future.
+
+The setup cost is approximately $7 per day, and I use the instances for 5 hours each day, stopping them when not in use.
 
 ![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
 
- 
-At this point the SOC is practically complete. The only missing piece is the installation of Greenbone due to an error in synchronizing with its server. Apart from that, everything is working as expected.
+Note that the SOC setup process is lengthy and nuanced, as the instructions in the Kali-Purple documentation are not very clear, resulting in lots of trial and error. However, it is possible to set up the same configuration for all machines except Bizantium, which requires some tweaking to avoid using VLANs. I also omitted the use of a domain name for simplicity.
 
-![gvm error](https://user-images.githubusercontent.com/47893772/231023515-74d4a5df-ab22-46ba-b785-88e57b1dbd2f.png)
+Currently, the cloud configuration and firewall accept packets from all over the internet, making it unsuitable for production situations but acceptable for proof of concept. To make it as close to production as possible, I will be hardening the AWS security groups, routing tables, NACs, and firewall rules.
 
- 
-The setup process is long and tedious with many nuances. Lots of trial and error. At this point the cloud configuration and the firewall is wide open and accepting packets from all overthe internet. This is not advisable for a production situation but it is acceptable for a proof of concept.Now I will be hardening the AWS security groups, routing tables, NACs and Firewall rules to make it as close as it could be to a production situation.
+In the future, I will be publishing a tutorial to help others replicate this setup, starting with the firewall setup, which is necessary for the rest of the instances unless an internet gateway is used.
 
-I'll be posting a tutorial that would help replicate this setup. I will concentrate on the firewall setup as a first step since it is needed for the rest of the instances unless an internet gateway is used.
- 
-I haven't tried an attack on the vulnerable kali-pearly machine yet. As soon as I do I will publish some screen shots of the SOC.
+Lastly, I have not yet attempted an attack the vulnerable Kali-Pearly machine. As soon as I do, I will publish some screenshots of the SOC.
+
  
 ## Usage
  
