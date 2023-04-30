@@ -67,6 +67,8 @@ Please note that this repository is still work in progress.
 
 Reference: https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
 
+CloudFormation is an AWS service and cannot be used for provisioning infrastructure on other cloud platforms like Azure, Google Cloud, etc. For those platforms, you need to use Terraform instead. A tool to make this conversion is available on this page: https://discuss.hashicorp.com/t/tool-to-convert-cloudformation-to-terraform/46704. Keep in mind that the tool may require some tweaking to work properly.
+
 ## AIM Images
 Due to AWS restrictions, AIM images with product codes cannot be made public. Therefore, the official Kali AIM cannot be used as a base. Instead, a Debian AIM with the Kali repository added was used. Several methods exist for achieving this, but the method outlined in this article was chosen https://miloserdov.org/?p=3609&PageSpeed=noscript. When installing Kali packages, follow the syntax 
 ```
