@@ -40,15 +40,15 @@ The instance types defaults are the minimum required for each to work. You can c
  
 ## Configuration
  
-To set up the SOC, I could not find any Kali Purple images in AWS, so I used a regular Kali Linux image and manually installed only the required packages. Additionally, I followed the www.elastic.co documentation to install the Elastic stack, which was not available in Kali at the time.
+To set up the SOC, I could not find any Kali Purple images in AWS without product codes, so I used a regular Debian image and manually installed only the required packages for each of the machines. Additionally, some of the packages are not yet available or not well configured int the Kali repositories so I had to go to the original repositories. One example of this is the Elastic Stack. 
 
-The setup cost is approximately $7 per day, and I use the instances for 5 hours each day, stopping them when not in use.
+The cost of running this setup is approximately $7 per day, and I use the instances for 5 hours each day, stopping them when not in use.
 
 ![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
 
-Note that the SOC setup process is lengthy and nuanced, as the instructions in the Kali-Purple documentation are not very clear, resulting in lots of trial and error. However, it is possible to set up the same configuration for all machines except Bizantium, which requires some tweaking to avoid using VLANs. I also omitted the use of a domain name for simplicity.
+Note that the SOC setup process is lengthy and nuanced, as the instructions in the Kali-Purple documentation are not very clear, resulting in lots of trial and error. However, it is possible to set up the same configuration as in the Kali-Purple instructions for all machines except Bizantium, which requires some tweaking to avoid using VLANs. I also omitted the use of a domain name for simplicity.
 
-Currently, the cloud configuration and firewall accept packets from all over the internet, making it unsuitable for production situations but acceptable for proof of concept. To make it as close to production as possible, I will be hardening the AWS security groups, routing tables, NACs, and firewall rules.
+Currently, the cloud configuration and firewall accept packets from all over the internet and in all of the internal connections, making it unsuitable for production situations but acceptable for proof of concept. To make it as close to production as possible, I will be hardening the AWS security groups, routing tables, NACs, and firewall rules.
 
 In the future, I will be publishing a tutorial to help others replicate this setup, starting with the firewall setup, which is necessary for the rest of the instances unless an internet gateway is used.
 
