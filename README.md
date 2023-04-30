@@ -22,7 +22,7 @@ This is the diagram of the VPC. I reduced the number of subnets for simplicity b
  
 ## Installation
  
-To install this project, you need to have an AWS account and access to CloudFormation service. You first have to launch the VPC stack using the KaliPurple-VPC.yml file. Write "vpc" in the stack name for simplicity. It will create all the necessary subnets and security groups.
+To install this project, you need to have an AWS account and access to CloudFormation service. You first have to launch the VPC stack using the KaliPurple-VPC.yml file. Write "vpc" in the stack name for simplicity. It will create all the necessary subnets and security groups. I used the N. Virginia region so all images belong to it. If you want to use a different region you need to use different images. 
  
 Once this stack is created, you need to create the instances using the KaliPurple-NAT-EC2.yml file. For simplicity use "ec2" as a name. You need to input the name of the VPC stack that was created previously.
 
@@ -41,8 +41,6 @@ The instance types defaults are the minimum required for each to work. You can c
 ## Configuration
  
 To set up the SOC, I could not find any Kali Purple images in AWS, so I used a regular Kali Linux image and manually installed only the required packages. Additionally, I followed the www.elastic.co documentation to install the Elastic stack, which was not available in Kali at the time.
-
-While I had originally planned to make the final AMI images publicly available via Kali to simplify the setup process, I discovered that AWS does not allow AMIs with product codes to be made public. Additionally, due to the current risk associated with the firewall's log collection, it is not advisable to share them publicly until logs that contain private information are cleared. Therefore, I will be creating images without product codes and ensure that any logs with personal information are cleared before sharing them in the future.
 
 The setup cost is approximately $7 per day, and I use the instances for 5 hours each day, stopping them when not in use.
 
@@ -68,6 +66,71 @@ You can use Kali Linux as your attack platform on the kali-pearly instance and r
 Please note that this repository is still work in progress.
 
 Reference: https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
+
+## AIM Images
+Due to AWS restrictions, AIM images with product codes cannot be made public. Therefore, the official Kali AIM cannot be used as a base. Instead, a Debian AIM with the Kali repository added was used. Several methods exist for achieving this, but the method outlined in this article was chosen https://miloserdov.org/?p=3609&PageSpeed=noscript. When installing Kali packages, follow the syntax 
+```
+sudo aptitude install -t <package-name>.
+```
+
+These machines can be accessed within the Cloud Formation VPC, or they can be launched individually. If you wish to access them in the Cloud Formation VPC and have not yet configured OPNSense with OpenVPN, use a Bastion such as Guacamole since the machines are created in a private subnet. Simultaneously launching Guacamole is an option when launching the instances in CloudFormation.
+
+All these machines have a user named ´kali' with the password 'kali2023'. The 'root' user's password is also 'kali2023'. The Elastic-Agent is not installed on the images. Install the agent once you have Kali-Purple running. 
+
+### Kali-Basic
+This machine is not part of the SOC, but it has been included to assist users with customizations. It does not have any Kali tools installed. This image can be found on AWS as 'ami-0dbd53121fa982e40'.
+
+### Kali-Pearly
+I decided not to publish a vulnerable machine as an AMI image in AWS, so the image that I included in the CloudFormation script is Kali-Basic. This is the simplest of the Kali-Purple machines, but the instructions provided to set up dvwa did not work for me. I had to go to the official repository to obtain it at https://github.com/digininja/DVWA. I used the following commands to set it up:
+
+```
+sudo apt update
+sudo apt upgrade
+sudo apt install -t kali-rolling apache2 mariadb-server mariadb-client php php-mysqli php-gd libapache2-mod-php php8.2-mysql git
+cd Downloads/
+git clone https://github.com/digininja/DVWA.git
+sudo mv DVWA/ /var/www/html/
+cd /var/www/html/DVWA/
+cp config/config.inc.php.dist config/config.inc.php
+```
+Database setup is also necessary:
+```
+sudo mysql
+
+mysql> create database dvwa;
+```
+Query OK, 1 row affected (0.00 sec)
+```
+mysql> create user dvwa@localhost identified by 'p@ssw0rd';
+```
+Query OK, 0 rows affected (0.01 sec)
+```
+mysql> grant all on dvwa.* to dvwa@localhost;
+```
+Query OK, 0 rows affected (0.01 sec)
+```
+mysql> flush privileges;
+```
+Query OK, 0 rows affected (0.00 sec)
+
+Assuming you have Kali-Purple ready, use a desktop viewer and xrdp to connect to 192.168.1.20 (Kali-Purple's OpenVPN should take care of this). Once connected, open Heliotrope's browser and navigate to <kali-Pearly's IP address>/DVWA/login.php. Log in with the username 'admin' and the password 'password', 
+
+### Kali-Heliotrope
+A Kali-Basic machine with XRDP and XFCE desktop installed and basic tools. This image can be found on AWS as 'ami-03d8d342a533f5c75'.
+
+### Kali-Eminence
+A Kali-Basic machine with Malcolm installed and running. This image can be found on AWS as 'ami-04563635f0999dc56'. To start Malcolm you need to input the following command. 
+
+```
+./scripts/start
+```
+Now you can access the dashboard and other pages (Kali-Purple's OpenVPN should take care of this).
+```
+https://192.168.253.103/dashboard
+```
+
+
+### The remaining images will be available soon.
 
 ## Tips
 - The Byzantium machine needs 3 interfaces (LAN, WAN, and SOC). AWS may get them mixed up when it launches. Obtain the MAC address of the interfaces in the interfaces section of AWS and assign them to the appropriate subnet in the interfaces menu of OPNsense.
