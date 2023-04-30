@@ -42,7 +42,7 @@ The instance types defaults are the minimum required for each to work. You can c
  
 To set up the SOC, I could not find any Kali Purple images in AWS without product codes, so I used a regular Debian image and manually installed only the required packages for each of the machines. Additionally, some of the packages are not yet available or not well configured int the Kali repositories so I had to go to the original repositories. One example of this is the Elastic Stack. 
 
-The cost of running this setup is approximately $7 per day, and I use the instances for 5 hours each day, stopping them when not in use.
+The cost of running this setup is approximately $6 per day, and I use the instances for 5 hours each day, stopping them when not in use.
 
 ![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
 
