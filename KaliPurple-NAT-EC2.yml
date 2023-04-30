@@ -848,13 +848,13 @@ Resources:
       Tags:
         - Key: Name
           Value: Kali SOC | Kali-Eminence
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash 
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-            service sshd restart
-            echo 'kali:kali2023' | chpasswd #Change Password Later
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash 
+#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+#            service sshd restart
+#            echo 'kali:kali2023' | chpasswd #Change Password Later
             
   KaliPearly:
     Type: AWS::EC2::Instance
@@ -877,13 +877,13 @@ Resources:
       Tags:
         - Key: Name
           Value: Kali SOC | Kali-Pearly
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash 
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-            service sshd restart
-            echo 'kali:kali2023' | chpasswd #Change Password Later
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash 
+#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+#            service sshd restart
+#            echo 'kali:kali2023' | chpasswd #Change Password Later
             
   KaliHeliotrope:
     Type: AWS::EC2::Instance
@@ -905,13 +905,13 @@ Resources:
       Tags:
         - Key: Name
           Value: Kali SOC | Kali-Heliotrope
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-            service sshd restart
-            echo 'kali:kali2023' | chpasswd #Change Password Later
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash
+#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+#            service sshd restart
+#            echo 'kali:kali2023' | chpasswd #Change Password Later
             
   GuacamoleBastion:
     Type: AWS::EC2::Instance
