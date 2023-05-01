@@ -30,9 +30,9 @@ Once this stack is created, you need to create the instances using the KaliPurpl
 
 
  
-The EC2 stack gives you the possibility of choosing the instances that you want to launch. This way you don't have to pay for services that you don't need. I used the Guacamole Bastion initially but there is no need for it once the firewall and its OpenVPN is configured unless there is a problem with one of the instances.
- 
-I left the option of launching it if needed but it is not necessary for most cases. I also left the possibility of using an internet gateway for the instances in the SOC and LAN subnets to have access to the internet. Again, this option should not be necessary once the firewall is configured.
+The EC2 stack gives you the possibility of choosing the instances that you want to launch. This way you don't have to pay for services that you don't need. I used the Guacamole Bastion initially but there is no need for it once the firewall and its OpenVPN is configured unless there is a problem with one of the instances. I left the option of launching it if needed but it is not necessary for most cases. I also left the possibility of using an internet gateway for the instances in the SOC and LAN subnets to have access to the internet. Again, this option should not be necessary once the firewall is configured.
+
+
 
  ![AWS Instances](https://user-images.githubusercontent.com/47893772/231023159-8aa8e92c-73b9-4765-be08-45234d8d7950.png)
  
@@ -45,6 +45,8 @@ To set up the SOC, I could not find any Kali Purple images in AWS without produc
 The cost of running this setup is approximately $6 per day, and I use the instances for 5 hours each day, stopping them when not in use.
 
 ![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
+
+The VPC stack in AWS is free, so you can leave it running indefinitely. However, keep in mind that AWS will charge for services in the EC2 stack, so be sure to it once you no longer needed to avoid unnecessary charges.
 
 Note that the SOC setup process is lengthy and nuanced, as the instructions in the Kali-Purple documentation are not very clear, resulting in lots of trial and error. However, it is possible to set up the same configuration as in the Kali-Purple instructions for all machines except Bizantium, which requires some tweaking to avoid using VLANs. I also omitted the use of a domain name for simplicity.
 
