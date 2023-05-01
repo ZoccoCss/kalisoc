@@ -130,12 +130,32 @@ Now you can access the dashboard and other pages (Kali-Purple's OpenVPN should t
 ```
 https://192.168.253.103/dashboard
 ```
+### Kali-Bizantium
+Rather than a machine image, in this case the most efficient way to share this machine is via it's configuration file ![Bizantium Config](/config-byzantium.localdomain.xml). You need to edit the file and paste your ip address in the places were 'XXX.XXX.XXX.XXX' appear. Launch the default OpenSense image in the stack and upload the configuration file. The passwords for this configuation are the following. 
+```
+**********************************************************************************************************
 
+*** set initial ec2-user password to : PHbbdPhJjUfq4J43R8SLepe2JDWGGiXpDRJNzEocz7YVlXKMY5
 
+*** !!! remember to change this immediately
+
+*** openssh-key provided, set to ec2-user
+
+*** set initial root password to : 6s89E3cPU9oE3uRHN59H4jEkQ7n6udvV8nGxpocXRKRyHNMwHo
+
+*** remember to change this immediately
+
+**********************************************************************************************************
+```          
+I left the OpenVPN configuration, you need to change the hostname in the client export section to the ip address of the ec2 instance. I left the certificates, to help you see how I configured it. You might want to change this. The username and password for the OpenVPN are the following.
+```
+Username: kaliopenvpn
+Password: bizantium
+```
 ### The remaining images will be available soon.
 
 ## Tips
-- The Byzantium machine needs 3 interfaces (LAN, WAN, and SOC). AWS may get them mixed up when it launches. Obtain the MAC address of the interfaces in the interfaces section of AWS and assign them to the appropriate subnet in the interfaces menu of OPNsense.
+- The Byzantium machine needs 3 interfaces (LAN, WAN, and SOC). OpnSense may get them mixed up when it launches. Obtain the MAC address of the interfaces in the interfaces section of AWS and assign them to the appropriate subnet in the interfaces menu of OPNsense. If you can't access the login screen, relaunch the stack.
 
 - When the Byzantium machine is stopped, it may lose the public IP address assigned. You need to create an Elastic IP and assign it to the WAN interface to solve this issue.
 
