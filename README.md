@@ -75,10 +75,13 @@ Due to AWS restrictions, AIM images with product codes cannot be made public. Th
 sudo aptitude install -t <package-name>.
 ```
 
-These machines can be accessed within the Cloud Formation VPC, or they can be launched individually. If you wish to access them in the Cloud Formation VPC and have not yet configured OPNSense with OpenVPN, use a Bastion such as Guacamole since the machines are created in a private subnet. Simultaneously launching Guacamole is an option when launching the instances in CloudFormation.
+These machines can be accessed within the Cloud Formation VPC, or they can be launched individually. If you wish to access them in the Cloud Formation VPC and have not yet configured OPNSense with OpenVPN, use a Bastion such as Guacamole since the machines are created in a private subnet. Simultaneously launching Guacamole is an option when launching the instances in CloudFormation.The Elastic-Agent is not installed on the images. Install the agent once you have Kali-Purple running. 
 
-All these machines have a user named ´kali' with the password 'kali2023'. The 'root' user's password is also 'kali2023'. The Elastic-Agent is not installed on the images. Install the agent once you have Kali-Purple running. 
-
+To login use the following credentials. 
+```
+Username: kali
+Password: kali2023
+```
 ### Kali-Basic
 This machine is not part of the SOC, but it has been included to assist users with customizations. It does not have any Kali tools installed. This image can be found on AWS as 'ami-0dbd53121fa982e40'.
 
