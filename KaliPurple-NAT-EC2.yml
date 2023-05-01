@@ -626,7 +626,7 @@ Parameters:
     Default: ami-02647105d04545ef1   #  ami-0d15b4289190035e4  Change to Bitmami
     
   AmazonImageIDByzantium:
-    Description: The ID of the Amazon machine image (AMI) - Bastion - Default is OPNSense
+    Description: The ID of the Amazon machine image (AMI) - Default is OPNSense
     Type: String
     Default: ami-02d8b8fcc683ef5cc  
  
