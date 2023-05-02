@@ -157,6 +157,13 @@ I left the OpenVPN configuration, you need to change the hostname in the client 
 Username: kaliopenvpn
 Password: bizantium
 ```
+### Kali-Purple
+The Kali-Purple image is 'ami-0f0e440cf357443a4' and the Elasticsearch credentials are the following:
+```
+Username: elastic
+Password: 9voOW_WV6AO3EifKz=uu
+```
+
 ### The remaining images will be available soon.
 
 ## Tips
