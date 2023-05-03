@@ -141,7 +141,7 @@ Password: 9voOW_WV6AO3EifKz=uu
 ```
 
 ### Kali Violet
-The Kali-Violet image is 'ami-0ea952e3e2d36ebad'. The credentials are he following.
+The Kali-Violet image is 'ami-0ea952e3e2d36ebad'. To enter OpenCTI point your browser to https://192.178.253.107:8080. No connectors were configured. For GVM use https://192.168.253.107:9392. The credentials are he following.
 
 OpenCTI
 ```
