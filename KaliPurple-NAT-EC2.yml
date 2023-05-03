@@ -791,13 +791,13 @@ Resources:
       Tags:
         - Key: Name
           Value: Kali SOC | Kali-Purple
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash 
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-            service sshd restart
-            echo 'kali:kali2023' | chpasswd #Change Password Later
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash 
+#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+#            service sshd restart
+#            echo 'kali:kali2023' | chpasswd #Change Password Later
 
   KaliViolet:
     Type: AWS::EC2::Instance
@@ -820,13 +820,13 @@ Resources:
       Tags:
         - Key: Name
           Value: Kali SOC | Kali-Violet
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash 
-            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
-            service sshd restart
-            echo 'kali:kali2023' | chpasswd #Change Password Later
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash 
+#            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config   
+#            service sshd restart
+#            echo 'kali:kali2023' | chpasswd #Change Password Later
             
   KaliEminece:
     Type: AWS::EC2::Instance
@@ -956,10 +956,10 @@ Resources:
       Tags:
         - Key: Name
           Value: Kali SOC | Byzantium
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash
+#      UserData:
+#        Fn::Base64:
+#          !Sub |
+#            #!/bin/bash
 
   ByzLANAttachmnet:            
     Type: AWS::EC2::NetworkInterfaceAttachment
