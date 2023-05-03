@@ -33,8 +33,6 @@ The EC2 stack gives you the possibility of choosing the instances that you want 
 The instance types defaults are the minimum required for each to work. You can choose a bigger type if desired.
  
 ## Configuration
- 
-There are no Kali Purple images in AWS without product codes, so I used a regular Debian image and manually installed only the required packages for each of the machines. Additionally, some of the packages are not yet available or not well configured int the Kali repositories so I had to go to the original repositories. One example of this is the Elastic Stack. 
 
 The setup is similar to that described in Kali-Purple SOC instructions, with some modifications made to avoid the use of VLANs. For simplicity, the domain name was not utilized.
 
@@ -42,7 +40,7 @@ Currently, the cloud configuration and firewall accept packets from all over the
  
 ## Usage
  
-To use this project, you need to connect to the firewall instance using its public IP address and configure its OpenVPN service. You can then use the OpenVPN client on your machine to connect to the firewall. You can then access all the other instances in the SOC and LAN subnets using their private IP addresses through SSH or RDP protocols. 
+To use this project, you need to connect to the firewall instance using its public IP address and configure its OpenVPN service. You can then use the OpenVPN client on your machine to connect to the firewall. You can then access all the other instances in the SOC and LAN subnets using their private IP addresses through http. https, SSH or RDP protocols. 
 
 You need to enter into Elasticsearch and then install an Elastic-Agent of each of the other machines except for Kali-Pearly. Otherwise, data will not be ingested into Elasticsearch. 
  
@@ -53,6 +51,8 @@ Due to AWS restrictions, AIM images with product codes cannot be made public. Th
 ```
 sudo aptitude install -t <package-name>.
 ```
+Some of the packages are not yet available or not well-configured in the default Kali repositories, so I had to install them from the original repositories. An example of this is the Elastic Stack. Only the minimum required packages were installed in each of the images.
+
 These machines can be accessed within the Cloud Formation VPC, or they can be launched individually. If you wish to access them in the Cloud Formation VPC and have not yet configured OPNSense with OpenVPN, use a Bastion such as Guacamole since the machines are created in a private subnet. Simultaneously launching Guacamole is an option when launching the instances in CloudFormation.
 
 To login to all EC2 instances, except for Bizantium, use the following credentials. 
@@ -99,7 +99,7 @@ Query OK, 0 rows affected (0.00 sec)
 Assuming you have Kali-Purple ready, use a desktop viewer and xrdp to connect to 192.168.1.20 (Kali-Purple's OpenVPN should take care of this). Once connected, open Heliotrope's browser and navigate to <kali-Pearly's IP address>/DVWA/login.php. Log in with the username 'admin' and the password 'password', 
 
 ### Kali-Heliotrope
-A Kali-Basic machine with XRDP and XFCE desktop installed and basic tools. This image can be found on AWS as 'ami-03d8d342a533f5c75'.
+A Kali-Basic machine with XRDP and XFCE desktop installed and basic tools. This image can be found on AWS as 'ami-03d8d342a533f5c75'. Point a desktop viewer with the XRDP protocol to 192.168.1.20.
 
 ### Kali-Eminence
 A Kali-Basic machine with Malcolm installed and running. This image can be found on AWS as 'ami-04563635f0999dc56'. To start Malcolm you need to input the following command. 
@@ -108,9 +108,30 @@ A Kali-Basic machine with Malcolm installed and running. This image can be found
 ./scripts/start
 ```
 Now you can access the dashboard and other pages (Kali-Purple's OpenVPN should take care of this).
-```
+
+Point your browser to the following links:
+
+https://192.168.253.103/
+
 https://192.168.253.103/dashboard
-```
+
+https://192.168.253.103/upload
+
+https://192.168.253.103/netbox
+
+https://192.168.253.103/cyberchef
+
+https://192.168.253.103/readme
+
+https://192.168.253.103/name-map-ui
+
+https://192.168.253.103:488
+
+https://192.168.253.103:9443
+
+https://192.168.253.103:8022/files
+
+
 ### Kali-Bizantium
 Rather than a machine image, in this case the most efficient way to share this machine is via it's configuration file ![Bizantium Config](/config-byzantium.localdomain.xml). You need to edit the file and paste your ip address in the places were 'XXX.XXX.XXX.XXX' appear. Launch the default OpenSense image in the stack and upload the configuration file. The passwords for this configuation are the following. 
 ```
@@ -140,8 +161,10 @@ Username: elastic
 Password: 9voOW_WV6AO3EifKz=uu
 ```
 
+Point the browser to https://192.168.253.105:5601
+
 ### Kali Violet
-The Kali-Violet image is 'ami-0ea952e3e2d36ebad'. To enter OpenCTI point your browser to https://192.178.253.107:8080. No connectors were configured. For GVM use https://192.168.253.107:9392. The credentials are he following.
+The Kali-Violet image is 'ami-0ea952e3e2d36ebad'. The credentials are he following.
 
 OpenCTI
 ```
@@ -158,6 +181,12 @@ GVM
 Username: admin
 Password: efa72ac9-95fe-496e-b110-e68baa757ea5
 ```
+
+The links are:
+
+https://192.178.253.107:8080
+
+https://192.178.253.107:9392
 
 ## Tips
 - The Byzantium machine needs 3 interfaces (LAN, WAN, and SOC). OpnSense may get them mixed up when it launches. Obtain the MAC address of the interfaces in the interfaces section of AWS and assign them to the appropriate subnet in the interfaces menu of OPNsense. If you can't access the login screen, relaunch the stack.
