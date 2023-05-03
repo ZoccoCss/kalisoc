@@ -17,8 +17,6 @@ It consists of two files:
 This is the diagram of the VPC. I reduced the number of subnets for simplicity by grouping all the VLANs into one. This reduced the number of required interfaces in the firewall from 5 to 3 and this allowed me to choose an instance type that was more cost effective. I know that the solution is not the ideal but it was a compromise that I had to make. Also, I didn't use the kali.purple domain name so all the references to the machines are done through their respective private ip addresses. 
 
 ![VPC](https://user-images.githubusercontent.com/47893772/231020516-6c6cc77f-19f5-480d-a762-50b57fb26450.png)
-
-
  
 ## Installation
  
@@ -27,12 +25,8 @@ To install this project, you need to have an AWS account and access to CloudForm
 Once this stack is created, you need to create the instances using the KaliPurple-NAT-EC2.yml file. For simplicity use "ec2" as a name. You need to input the name of the VPC stack that was created previously.
 
 ![AWS Cloudformation](https://user-images.githubusercontent.com/47893772/231020706-82afa33e-b182-4b1f-9ed3-4f71fe0f1b63.png)
-
-
  
 The EC2 stack gives you the possibility of choosing the instances that you want to launch. This way you don't have to pay for services that you don't need. I used the Guacamole Bastion initially but there is no need for it once the firewall and its OpenVPN is configured unless there is a problem with one of the instances. I left the option of launching it if needed but it is not necessary for most cases. I also left the possibility of using an internet gateway for the instances in the SOC and LAN subnets to have access to the internet. Again, this option should not be necessary once the firewall is configured.
-
-
 
  ![AWS Instances](https://user-images.githubusercontent.com/47893772/231023159-8aa8e92c-73b9-4765-be08-45234d8d7950.png)
  
@@ -40,46 +34,28 @@ The instance types defaults are the minimum required for each to work. You can c
  
 ## Configuration
  
-To set up the SOC, I could not find any Kali Purple images in AWS without product codes, so I used a regular Debian image and manually installed only the required packages for each of the machines. Additionally, some of the packages are not yet available or not well configured int the Kali repositories so I had to go to the original repositories. One example of this is the Elastic Stack. 
+There are no Kali Purple images in AWS without product codes, so I used a regular Debian image and manually installed only the required packages for each of the machines. Additionally, some of the packages are not yet available or not well configured int the Kali repositories so I had to go to the original repositories. One example of this is the Elastic Stack. 
 
-The cost of running this setup is approximately $6 per day, and I use the instances for 5 hours each day, stopping them when not in use.
+The setup is similar to that described in Kali-Purple SOC instructions, with some modifications made to avoid the use of VLANs. For simplicity, the domain name was not utilized.
 
-![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
-
-The VPC stack in AWS is free, so you can leave it running indefinitely. However, keep in mind that AWS will charge for services in the EC2 stack, so be sure to it once you no longer needed to avoid unnecessary charges.
-
-Note that the SOC setup process is lengthy and nuanced, as the instructions in the Kali-Purple documentation are not very clear, resulting in lots of trial and error. However, it is possible to set up the same configuration as in the Kali-Purple instructions for all machines except Bizantium, which requires some tweaking to avoid using VLANs. I also omitted the use of a domain name for simplicity.
-
-Currently, the cloud configuration and firewall accept packets from all over the internet and in all of the internal connections, making it unsuitable for production situations but acceptable for proof of concept. To make it as close to production as possible, I will be hardening the AWS security groups, routing tables, NACs, and firewall rules.
-
-In the future, I will be publishing a tutorial to help others replicate this setup, starting with the firewall setup, which is necessary for the rest of the instances unless an internet gateway is used.
-
-Lastly, I have not yet attempted an attack the vulnerable Kali-Pearly machine. As soon as I do, I will publish some screenshots of the SOC.
-
+Currently, the cloud configuration and firewall accept packets from all over the internet and in all of the internal connections, making it unsuitable for production situations but acceptable for proof of concept.
  
 ## Usage
  
-To use this project, you need to connect to the firewall instance using its public IP address and configure its OpenVPN service. You can then download and install the OpenVPN client on your machine and connect to the firewall using its private IP address. 
+To use this project, you need to connect to the firewall instance using its public IP address and configure its OpenVPN service. You can then use the OpenVPN client on your machine to connect to the firewall. You can then access all the other instances in the SOC and LAN subnets using their private IP addresses through SSH or RDP protocols. 
+
+You need to enter into Elasticsearch and then install an Elastic-Agent of each of the other machines except for Kali-Pearly. Otherwise, data will not be ingested into Elasticsearch. 
  
-You can then access all the other instances in the SOC and LAN subnets using their private IP addresses through SSH or RDP protocols.
- 
-You can use Kali Linux as your attack platform on the kali-pearly instance and run various tools such as Nmap, Metasploit, Burp Suite, etc. You can also upload other vulnerable machine AMIs to perform attacks. Once the simulated attack is complete, you can delete the stack and pay only for the time used. 
-
-Please note that this repository is still work in progress.
-
-Reference: https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
-
-CloudFormation is an AWS service and cannot be used for provisioning infrastructure on other cloud platforms like Azure, Google Cloud, etc. For those platforms, you need to use Terraform instead. A tool to make this conversion is available on this page: https://discuss.hashicorp.com/t/tool-to-convert-cloudformation-to-terraform/46704. Keep in mind that the tool may require some tweaking to work properly.
+You can use Kali-Heliotrope as your attack platform on the kali-pearly instance. You can also upload other vulnerable machine AMIs. Once you are done, delete the stack. 
 
 ## AIM Images
-Due to AWS restrictions, AIM images with product codes cannot be made public. Therefore, the official Kali AIM cannot be used as a base. Instead, a Debian AIM with the Kali repository added was used. Several methods exist for achieving this, but the method outlined in this article was chosen https://miloserdov.org/?p=3609&PageSpeed=noscript. When installing Kali packages, follow the syntax 
+Due to AWS restrictions, AIM images with product codes cannot be made public. Therefore, the official Kali AIM cannot be used as a base. Instead, a Debian AIM with the Kali repository added was used. Several methods exist for achieving this, but the method outlined in [this](https://miloserdov.org/?p=3609&PageSpeed=noscript) article was chosen. When installing Kali packages, follow the syntax 
 ```
 sudo aptitude install -t <package-name>.
 ```
+These machines can be accessed within the Cloud Formation VPC, or they can be launched individually. If you wish to access them in the Cloud Formation VPC and have not yet configured OPNSense with OpenVPN, use a Bastion such as Guacamole since the machines are created in a private subnet. Simultaneously launching Guacamole is an option when launching the instances in CloudFormation.
 
-These machines can be accessed within the Cloud Formation VPC, or they can be launched individually. If you wish to access them in the Cloud Formation VPC and have not yet configured OPNSense with OpenVPN, use a Bastion such as Guacamole since the machines are created in a private subnet. Simultaneously launching Guacamole is an option when launching the instances in CloudFormation.The Elastic-Agent is not installed on the images. Install the agent once you have Kali-Purple running. 
-
-To login use the following credentials. 
+To login to all EC2 instances, except for Bizantium, use the following credentials. 
 ```
 Username: kali
 Password: kali2023
@@ -164,12 +140,46 @@ Username: elastic
 Password: 9voOW_WV6AO3EifKz=uu
 ```
 
-### The remaining images will be available soon.
+### Kali Violet
+The Kali-Violet image is 'ami-0ea952e3e2d36ebad'. The credentials are he following.
+
+OpenCTI
+```
+Username: admin@opencti.io
+Password: kalipurpleSOCCTI
+```
+OpenCTI Portainer
+```
+Username: admin
+Password: kalipurpleSOCPortainer
+```
+GVM
+```
+Username: admin
+Password: efa72ac9-95fe-496e-b110-e68baa757ea5
+```
 
 ## Tips
 - The Byzantium machine needs 3 interfaces (LAN, WAN, and SOC). OpnSense may get them mixed up when it launches. Obtain the MAC address of the interfaces in the interfaces section of AWS and assign them to the appropriate subnet in the interfaces menu of OPNsense. If you can't access the login screen, relaunch the stack.
 
 - When the Byzantium machine is stopped, it may lose the public IP address assigned. You need to create an Elastic IP and assign it to the WAN interface to solve this issue.
+
+## Notes
+
+- Please note that this repository is still work in progress.
+
+- CloudFormation is an AWS service and cannot be used for provisioning infrastructure on other cloud platforms like Azure, Google Cloud, etc. For those platforms, you need to use Terraform instead. A tool to make this conversion is available on this page: https://discuss.hashicorp.com/t/tool-to-convert-cloudformation-to-terraform/46704. Keep in mind that the tool may require some tweaking to work properly.
+
+- Reference: https://gitlab.com/kalilinux/kali-purple/documentation/-/wikis/home
+
+## Cost
+
+The cost of running this setup is approximately $6 per day, and I use the instances for 5 hours each day, stopping them when not in use.
+
+![Cost History](https://user-images.githubusercontent.com/47893772/231023307-d604dc42-dcd1-4a30-92eb-4d333c99df88.png)
+
+The VPC stack in AWS is free, so you can leave it running indefinitely. However, keep in mind that AWS will charge for services in the EC2 stack, so be sure to delete it once you no longer needed to avoid unnecessary charges.
+
 
 ## Screenshots
 
