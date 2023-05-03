@@ -603,7 +603,7 @@ Parameters:
   AmazonImageIDKaliViolet:
     Description: The ID of the Amazon machine image (AMI) - Default is Kali
     Type: String
-    Default: ami-000db6736082f3ee9
+    Default: ami-0ea952e3e2d36ebad
     
   AmazonImageIDKaliEminence:
     Description: The ID of the Amazon machine image (AMI) - Default is Kali
