@@ -291,15 +291,6 @@
     <language>en_US</language>
     <dnsserver>8.8.8.8</dnsserver>
     <dnsserver>8.8.8.8</dnsserver>
-    <dnsallowoverride_exclude/>
-    <dns1gw>none</dns1gw>
-    <dns2gw>none</dns2gw>
-    <dns3gw>none</dns3gw>
-    <dns4gw>none</dns4gw>
-    <dns5gw>none</dns5gw>
-    <dns6gw>none</dns6gw>
-    <dns7gw>none</dns7gw>
-    <dns8gw>none</dns8gw>
   </system>
   <interfaces>
     <wan>
@@ -654,7 +645,7 @@
   <revision>
     <username>root@XXX.XXX.XXX.XXX</username>
     <time>1682943007.4379</time>
-    <description>/system_general.php made changes</description>
+    <description>/interfaces.php made changes</description>
   </revision>
   <OPNsense>
     <captiveportal version="1.0.1">
@@ -1282,7 +1273,17 @@
     <serial>2</serial>
   </ca>
   <gateways>
-    <gateway_item/>
+    <gateway_item>
+      <interface>lan</interface>
+      <gateway>dynamic</gateway>
+      <name>LAN_GWv4</name>
+      <priority/>
+      <weight/>
+      <ipprotocol>inet</ipprotocol>
+      <interval/>
+      <descr/>
+      <defaultgw>1</defaultgw>
+    </gateway_item>
   </gateways>
   <cert>
     <refid>642c7048b2209</refid>
@@ -1332,5 +1333,7 @@
       <certref>642cc348e2760</certref>
       <cert_depth>1</cert_depth>
     </openvpn-server>
+    <openvpn-client/>
   </openvpn>
+  <dhcpdv6/>
 </opnsense>
