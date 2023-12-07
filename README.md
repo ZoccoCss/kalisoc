@@ -20,7 +20,9 @@ This is the diagram of the VPC. I reduced the number of subnets for simplicity b
  
 ## Installation
  
-To install this project, you need to have an AWS account and access to CloudFormation service. You first have to launch the VPC stack using the KaliPurple-VPC.yml file. Write "vpc" in the stack name for simplicity. It will create all the necessary subnets and security groups. I used the N. Virginia region so all images belong to it. If you want to use a different region you need to use different images. 
+To install this project, you need to have an AWS account and access to CloudFormation service. You first have to create two IAM roles named 'KaliPurpleGuacamole' and 'KaliPurpleSSMFullAccess'. Using the 'AmazonSSMFullAccess' should be OK for a testing environment. 
+
+Launch the VPC stack using the KaliPurple-VPC.yml file. Write "vpc" in the stack name for simplicity. It will create all the necessary subnets and security groups. I used the N. Virginia region so all images belong to it. If you want to use a different region you need to use different images. 
  
 Once this stack is created, you need to create the instances using the KaliPurple-NAT-EC2.yml file. For simplicity use "ec2" as a name. You need to input the name of the VPC stack that was created previously.
 
@@ -133,7 +135,7 @@ https://192.168.253.103:8022/files
 
 
 ### Kali-Bizantium
-Rather than a machine image, in this case the most efficient way to share this machine is via it's configuration file ![Bizantium Config](/config-byzantium.localdomain.xml). You need to edit the file and paste your ip address in the places were 'XXX.XXX.XXX.XXX' appear. Launch the default OpenSense image in the stack and upload the configuration file. The passwords for this configuation are the following. 
+Rather than a machine image, in this case the most efficient way to share this machine is via it's configuration file ![Bizantium Config](/config-byzantium.localdomain.xml). You need to edit the file and paste your ip address in the places were 'XXX.XXX.XXX.XXX' appear. Launch the default OPNsense image in the stack and upload the configuration file. The passwords for this configuation are the following. 
 ```
 **********************************************************************************************************
 
