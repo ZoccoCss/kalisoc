@@ -20,7 +20,7 @@ This is the diagram of the VPC. I reduced the number of subnets for simplicity b
  
 ## Installation
  
-To install this project, you need to have an AWS account and access to CloudFormation service. You first have to create two IAM roles named 'KaliPurpleGuacamole' and 'KaliPurpleSSMFullAccess'. Using the 'AmazonSSMFullAccess' should be OK for a testing environment. 
+To install this project, you need to have an AWS account and access to CloudFormation service. You first have to create two IAM roles named 'KaliPurpleGuacamole' and 'KaliPurpleSSMFullAccess'. Using the 'AmazonSSMFullAccess' policy should be OK for a testing environment. 
 
 Launch the VPC stack using the KaliPurple-VPC.yml file. Write "vpc" in the stack name for simplicity. It will create all the necessary subnets and security groups. I used the N. Virginia region so all images belong to it. If you want to use a different region you need to use different images. 
  
